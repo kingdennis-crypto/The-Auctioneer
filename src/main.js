@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-import './input.css';
+import './output.css';
 import 'flowbite';
 
 createApp(App).mount('#app')

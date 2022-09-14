@@ -1,24 +1,24 @@
 <template>
-  <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <div class="container">
-    <AuctionHeader />
-    <AuctionNavbar />
-    <AuctionWelcome />
-  </div>
+  <!-- <AuctionHeader /> -->
+  <AuctionNavbar />
+  <AuctionWelcome />
+  <Footer />
 </template>
 
 <script>
-import AuctionHeader from './components/Header.vue';
+// import AuctionHeader from './components/Header.vue';
 import AuctionNavbar from './components/Navbar.vue';
 import AuctionWelcome from './components/Welcome.vue';
+import Footer from './components/Footer.vue';
 
 export default {
   name: 'App',
   components: {
-    AuctionHeader,
+    // AuctionHeader,
     AuctionNavbar,
     AuctionWelcome,
-}
+    Footer
+  }
 }
 </script>
 
@@ -26,6 +26,8 @@ export default {
   body {
     padding: 0px;
     overflow-x: hidden;  
+    min-height: 130vh;
+    position: relative;
   }
 
   #app {

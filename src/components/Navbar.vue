@@ -1,52 +1,69 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
-    <div class="container-fluid">
-      <!-- <a class="navbar-brand" href="#">Navbar</a> -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav text-start">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">My Offers</a>
-          </li>
-          
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              My bids
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" href="#">Active</a></li>
-              <li><a class="dropdown-item" href="#">History</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">My account</a>
-          </li>
-        </ul>
-        <div class="d-flex" style="margin-left: auto;">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Log in</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Sign in</a>
-            </li>
-          </ul>
-        </div>
+  <nav class="bg-white border-gray-200 dark:bg-gray-900">
+    <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl px-4 md:px-6 py-2.5">
+      <a href="#" class="flex items-center">
+        <img src="https://flowbite.com/docs/images/logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo">
+        <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">The Auctioneer</span>
+      </a>
+      <div class="flex items-center">
+        <a href="#" class="mr-6 text-sm font-medium text-gray-500 dark:text-white hover:underline">Sign in</a>
+        <a href="#"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</a>
       </div>
     </div>
   </nav>
+  <nav class="bg-gray-50 dark:bg-gray-700 mb-6">
+    <div class="py-3 px-4 mx-auto max-w-screen-xl md:px-6">
+      <div class="flex items-center">
+        <ul class="flex flex-row mt-0 mr-6 space-x-8 text-sm font-medium">
+          <li>
+            <a href="#" class="text-gray-900 dark:text-white hover:underline" aria-current="page">Home</a>
+          </li>
+          <li>
+            <a href="#" class="text-gray-900 dark:text-white hover:underline">My offers</a>
+          </li>
+          <li>
+            <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"
+              class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">My bids
+              <svg class="ml-1 w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"></path>
+              </svg></button>
+            <!-- Dropdown menu -->
+            <div id="dropdownNavbar"
+              class="hidden z-10 w-44 font-normal bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+              <ul class="py-1 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+                <li>
+                  <a href="#"
+                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Active</a>
+                </li>
+                <li>
+                  <a href="#"
+                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">History</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <a href="#" class="text-gray-900 dark:text-white hover:underline">My account</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
 </template>
 
 <script>
 export default {
   name: 'AuctionNavbar',
+  data() {
+    return {
+      currentDate: new Date()
+    }
+  }
 }
 </script>
 
