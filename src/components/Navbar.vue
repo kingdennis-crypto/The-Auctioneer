@@ -14,7 +14,7 @@
   </nav>
   <nav class="bg-gray-50 dark:bg-gray-700 mb-6">
     <div class="py-3 px-4 mx-auto max-w-screen-xl md:px-6">
-      <div class="flex items-center">
+      <div class="flex items-center justify-between">
         <ul class="flex flex-row mt-0 mr-6 space-x-8 text-sm font-medium">
           <li>
             <a href="#" class="text-gray-900 dark:text-white hover:underline" aria-current="page">Home</a>
@@ -24,7 +24,8 @@
           </li>
           <li>
             <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"
-              class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">My bids
+              class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">My
+              bids
               <svg class="ml-1 w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -50,6 +51,11 @@
             <a href="#" class="text-gray-900 dark:text-white hover:underline">My account</a>
           </li>
         </ul>
+        <ul>
+          <div class="mr-2">
+            <p>Today is {{ currentDate }}</p>
+          </div>
+        </ul>
       </div>
     </div>
   </nav>
@@ -57,11 +63,14 @@
 </template>
 
 <script>
+import dateFormat from "dateformat";
+const now = new Date();
+
 export default {
   name: 'AuctionNavbar',
   data() {
     return {
-      currentDate: new Date()
+      currentDate: dateFormat(now, "dddd mmmm dS, yyyy")
     }
   }
 }
