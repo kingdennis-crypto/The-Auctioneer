@@ -3,7 +3,8 @@
  * Made by Simon Vriesema
  */
 
-class Offer {
+// eslint-disable-next-line no-unused-vars
+export class Offer {
 
     constructor(id, title, status, description, sellDate, valueHighestBid) {
         this.id = id;
@@ -14,7 +15,7 @@ class Offer {
         this.valueHighestBid = valueHighestBid;
     }
 
-    public static createSampleOffer(pId = 0) {
+    static createSampleOffer(pId = 0) {
         function randomDate(start, end) {
             return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
         }

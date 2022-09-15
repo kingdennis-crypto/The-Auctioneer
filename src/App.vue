@@ -2,6 +2,8 @@
   <!-- <AuctionHeader /> -->
   <AuctionNavbar />
   <AuctionWelcome />
+  <Overview31/>
+  <h1>huvculcbul </h1>
   <Footer />
 </template>
 
@@ -10,6 +12,7 @@
 import AuctionNavbar from './components/Navbar.vue';
 import AuctionWelcome from './components/Welcome.vue';
 import Footer from './components/Footer.vue';
+import Overview31 from "./components/offers/Overview31.vue";
 
 export default {
   name: 'App',
@@ -17,7 +20,8 @@ export default {
     // AuctionHeader,
     AuctionNavbar,
     AuctionWelcome,
-    Footer
+    Footer,
+    Overview31,
   }
 }
 </script>
