@@ -36,8 +36,6 @@ class Offer {
         const status = randomArrayObject(statusses);
         const description = randomArrayObject(descriptions);
 
-        const offer = new Offer(0, title, status, description, sellDate, valueHighestBid);
-
-        return offer;
+        return new Offer(pId, title, status, description, sellDate, valueHighestBid);
     }
 }
