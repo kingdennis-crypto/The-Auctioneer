@@ -1,11 +1,16 @@
 <template>
   <nav class="bg-white border-gray-200 dark:bg-gray-900">
     <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl px-4 md:px-6 py-2.5">
-      <a href="#" class="flex items-center">
-        <img src="https://flowbite.com/docs/images/logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo">
-        <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">The Auctioneer</span>
-      </a>
-      <div class="flex items-center">
+      <div class="w-1/3 align-middle">
+        <a href="#" class="flex items-center">
+          <img src="https://flowbite.com/docs/images/logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo">
+          <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">The Auctioneer</span>
+        </a>
+      </div>
+      <div class="w-1/3 align-middle justify-start">
+        <p>Hello</p>
+      </div>
+      <div class="w-1/3 align-middle items-end`">
         <a href="#" class="mr-6 text-sm font-medium text-gray-500 dark:text-white hover:underline">Sign in</a>
         <a href="#"
           class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</a>
@@ -53,7 +58,7 @@
         </ul>
         <ul>
           <div class="mr-2">
-            <p>Today is {{ currentDate }}</p>
+            <p>Today is {{ getDate() }}</p>
           </div>
         </ul>
       </div>
@@ -71,6 +76,11 @@ export default {
   data() {
     return {
       currentDate: dateFormat(now, "dddd mmmm dS, yyyy")
+    }
+  },
+  methods: {
+    getDate () {
+      return this.currentDate
     }
   }
 }
