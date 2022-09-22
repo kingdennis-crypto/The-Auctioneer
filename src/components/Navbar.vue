@@ -8,7 +8,7 @@
         </a>
       </div>
       <div class="w-1/3 align-middle justify-start">
-        <p>Hello</p>
+        <p>Don't be vague, ask for the Auctioneer.</p>
       </div>
       <div class="w-1/3 align-middle items-end`">
         <a href="#" class="mr-6 text-sm font-medium text-gray-500 dark:text-white hover:underline">Sign in</a>
