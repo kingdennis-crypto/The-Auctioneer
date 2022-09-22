@@ -3,7 +3,7 @@
     <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl px-4 md:px-6 py-2.5">
       <div class="w-1/3 align-middle">
         <a href="#" class="flex items-center">
-          <img src="https://flowbite.com/docs/images/logo.svg" class="mr-3 h-6 sm:h-9" alt="the Auctioneer Logo">
+          <img src="../assets/welcome/image2vector.svg" class="mr-3 h-6 sm:h-9" alt="the Auctioneer Logo">
           <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">The Auctioneer</span>
         </a>
       </div>
