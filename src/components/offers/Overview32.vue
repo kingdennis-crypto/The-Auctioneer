@@ -35,10 +35,10 @@
   <!--          </table>-->
   <!--        </div>-->
   <!--        <div class="w-full">-->
-  <!--          <Detail32 v-if="selectedOrder" v-bind:item="selectedOrder"/>-->
-  <!--          <div v-else>-->
-  <!--            <p>Select an offer at the left</p>-->
-  <!--          </div>-->
+<!--            <Detail32 v-if="selectedOrder" v-bind:item="selectedOrder"/>-->
+<!--            <div v-else>-->
+<!--              <p>Select an offer at the left</p>-->
+<!--            </div>-->
   <!--        </div>-->
   <!--      </div>-->
 
@@ -94,11 +94,16 @@
 
     </div>
 
-    <div id="detail">
+    <div>
 
       <Detail32 v-if="selectedOrder" v-bind:item="selectedOrder"/>
 
+      <div v-else>
+        <p>Select an offer at the left</p>
+      </div>
+
     </div>
+
 
   </div>
 
