@@ -10,7 +10,7 @@ export class Offer {
         this.id = id;
         this.title = title;
         this.status = status;
-        this.decription = description;
+        this.description = description;
         this.sellDate = sellDate;
         this.valueHighestBid = valueHighestBid;
     }

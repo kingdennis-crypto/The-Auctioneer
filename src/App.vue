@@ -1,31 +1,23 @@
 <template>
-  <!-- <AuctionHeader /> -->
   <AuctionNavbar />
-  <!-- <AuctionWelcome /> -->
   <Overview32/>
-  <Detail32/>
   <Footer />
 </template>
 
 <script>
+  /* eslint-disable vue/no-unused-components */
 // import AuctionHeader from './components/Header.vue';
 // import AuctionWelcome from './components/Welcome.vue';
 import AuctionNavbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
-// import Overview31 from "./components/offers/Overview31.vue";
 import Overview32 from "./components/offers/Overview32.vue";
-import Detail32 from "./components/offers/Detail32.vue";
 
 export default {
   name: 'App',
   components: {
-    // AuctionHeader,
-    // AuctionWelcome,
     AuctionNavbar,
     Footer,
-    // Overview31,
-    Overview32,
-    Detail32
+    Overview32
   }
 }
 </script>

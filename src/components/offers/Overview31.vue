@@ -97,11 +97,10 @@
       </button>
     </div>
   </div>
-
 </template>
 
 <script>
-import {Offer} from "@/models/offer.js";
+import { Offer } from "@/models/offer.js";
 
 export default {
   name: "OffersOverview31",
