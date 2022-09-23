@@ -18,10 +18,12 @@
           </ul>
           <ul class="navbar-nav" v-if="!loggedIn">
             <li class="nav-item">
-              <a class="nav-link" href="#">Log in</a>
+              <router-link to="/sign-in" class="nav-link">Log in</router-link>
+              <!-- <a class="nav-link" href="#">Log in</a> -->
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Sign up</a>
+              <router-link to="/sign-up" class="nav-link">Sign up</router-link>
+              <!-- <a class="nav-link" href="#">Sign up</a> -->
             </li>
           </ul>
         </div>

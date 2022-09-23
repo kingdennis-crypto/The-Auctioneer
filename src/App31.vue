@@ -13,7 +13,7 @@ import Footer from './components/Footer.vue';
 import Overview32 from "./components/offers/Overview32.vue";
 
 export default {
-  name: 'App',
+  name: 'App31',
   components: {
     AuctionNavbar,
     Footer,
