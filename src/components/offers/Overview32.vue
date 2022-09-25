@@ -13,7 +13,7 @@
           <tbody>
             <tr v-for="(item) in offers" :key="item.id">
               <td @click="selectItem(item)"
-                class="py-4 px-6 font-medium whitespace-nowrap dark:text-white cursor-pointer rounded-sm hover:bg-gray-100"
+                class="py-4 px-6 font-medium whitespace-nowrap dark:text-white cursor-pointer rounded-sm [&:not(.bg-blue-500)]:hover:bg-gray-100"
                 :class="[ selectedOffer?.id === item.id ? selectedRowStyle : notSelectedRowStyle ]">
                 {{ item.title }}
               </td>
