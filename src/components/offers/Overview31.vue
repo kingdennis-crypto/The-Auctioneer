@@ -106,7 +106,6 @@ export default {
   name: "OffersOverview31",
 
   created() {
-    this.lastId = 30000;
     for (let i = 0; i < 8; i++) {
       this.offers.push(Offer.createSampleOffer(this.nextId));
       this.nextId = this.nextId + 3;

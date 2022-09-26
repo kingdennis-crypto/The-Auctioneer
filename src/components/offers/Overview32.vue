@@ -38,8 +38,6 @@
 </template>
 
 <script>
-/* eslint-disable vue/no-unused-components */
-
 import { Offer } from "@/models/offer";
 import Detail32 from "./Detail32.vue";
 
@@ -49,7 +47,6 @@ export default {
     Detail32,
   },
   created() {
-    this.lastId = 30000;
     for (let i = 0; i < 8; i++) {
       this.offers.push(Offer.createSampleOffer(this.nextId));
       this.nextId = this.nextId + 3;
@@ -90,14 +87,6 @@ export default {
         this.selectedOffer = null;
       }
     },
-
-    getSelectedOffer() {
-      if (!this.selectedOffer) {
-        return new Offer(0, 'No title', 'CLOSED', 'No description', new Date(), 'No highest bid');
-      }
-
-      return this.selectedOffer;
-    }
   },
 }
 </script>

@@ -5,7 +5,6 @@
 </template>
 
 <script>
-  /* eslint-disable vue/no-unused-components */
 // import AuctionHeader from './components/Header.vue';
 // import AuctionWelcome from './components/Welcome.vue';
 import AuctionNavbar from './components/Navbar.vue';

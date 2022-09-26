@@ -5,17 +5,14 @@
 </template>
 
 <script>
-  /* eslint-disable vue/no-unused-components */
 import AuctionNavbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
-import Overview32 from "./components/offers/Overview32.vue";
 
 export default {
   name: 'App',
   components: {
     AuctionNavbar,
     Footer,
-    Overview32
   }
 }
 </script>
