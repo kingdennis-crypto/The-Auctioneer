@@ -6,22 +6,22 @@
         <!-- TODO add a scroll to the table of it exceeds max height -->
         <table class="w-full mb-3 text-sm text-left text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th class="py-5 px-6">Offer title</th>
-          </tr>
+            <tr>
+              <th class="py-5 px-6">Offer title</th>
+            </tr>
           </thead>
           <tbody>
-          <tr v-for="(item) in offers" :key="item.id">
-            <td @click="selectItem(item)"
+            <tr v-for="(item) in offers" :key="item.id">
+              <td @click="selectItem(item)"
                 class="py-4 px-6 font-medium whitespace-nowrap dark:text-white cursor-pointer rounded-sm [&:not(.bg-blue-500)]:hover:bg-gray-100"
                 :class="[ selectedOffer?.id === item.id ? selectedRowStyle : notSelectedRowStyle ]">
-              {{ item.title }}
-            </td>
-          </tr>
+                {{ item.title }}
+              </td>
+            </tr>
           </tbody>
         </table>
         <button class="bg-blue-500 w-full p-3 rounded-md text-white cursor-pointer font-medium hover:bg-blue-600"
-                @click="onNewOffer">
+          @click="onNewOffer">
           Add offer
         </button>
       </div>
@@ -62,6 +62,8 @@ export default {
     }
   },
 
+  
+
   watch: {
     '$route'() {
       this.selectedOffer = this.findSelectedRouteFromRouteParam(this.$route.params.id);
@@ -83,8 +85,12 @@ export default {
       }
 
       this.selectedOffer = element;
-      // Set the id of the offer in the route param
-      this.$router.push({name: this.$router.currentRoute.id, params: {id:element.id}})
+
+      // Checks if the selected offer is null
+      if (this.selectedOffer !== null) {
+        // Set the id of the offer in the route param
+        this.$router.push(this.$route.matched[0].path + "/" + element.id);
+      }
     },
 
     deleteOffer() {
@@ -97,14 +103,6 @@ export default {
     findSelectedRouteFromRouteParam(id) {
       return this.offers.find(element => element.id === parseInt(id));
     },
-
-    onSelect(offer) {
-      if (offer != null && offer !== this.selectedOffer) {
-        this.$router.push(this.$route.matched[0].path + "/" + offer.id)
-      } else if (this.selectedOffer != null) {
-        this.$router.push(this.$route.matched[0].path + "/" + offer.id)
-      }
-    }
   },
 }
 </script>
