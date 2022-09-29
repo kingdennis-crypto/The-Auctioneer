@@ -62,6 +62,12 @@ export default {
     }
   },
 
+  watch: {
+    '$route'() {
+      this.selectedOffer = this.findSelectedRouteFromRouteParam(this.$route.params.id);
+    }
+  },
+
   methods: {
     onNewOffer: function () {
       const newOffer = Offer.createSampleOffer(this.nextId);
@@ -77,6 +83,8 @@ export default {
       }
 
       this.selectedOffer = element;
+      // Set the id of the offer in the route param
+      this.$router.push({name: this.$router.currentRoute.id, params: {id:element.id}})
     },
 
     deleteOffer() {
@@ -86,11 +94,14 @@ export default {
       }
     },
 
+    findSelectedRouteFromRouteParam(id) {
+      return this.offers.find(element => element.id === parseInt(id));
+    },
+
     onSelect(offer) {
       if (offer != null && offer !== this.selectedOffer) {
         this.$router.push(this.$route.matched[0].path + "/" + offer.id)
       } else if (this.selectedOffer != null) {
-        // TO DO
         this.$router.push(this.$route.matched[0].path + "/" + offer.id)
       }
     }
