@@ -28,8 +28,8 @@
       <div class="w-3/4">
         <div class="relative h-full">
           <router-view v-if="selectedOffer" v-bind:item="selectedOffer" @delete-selected="deleteOffer()" />
-          <div v-else class="bg-violet-500 h-full w-full absolute flex rounded-md">
-            <p class="text-white text-5xl font-bold m-auto">No offer was selected</p>
+          <div v-else class="h-full w-full absolute flex rounded-md">
+            <p class="text-black text-2xl m-auto">No offer was selected</p>
           </div>
         </div>
       </div>
