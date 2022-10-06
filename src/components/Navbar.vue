@@ -16,7 +16,7 @@
       </div>
     </div>
   </nav>
-  <nav class="bg-gray-50 dark:bg-gray-700 mb-6">
+  <nav class="bg-gray-50 dark:bg-gray-700 mb-4">
     <div class="py-3 px-4 mx-auto max-w-screen-xl md:px-6">
       <div class="flex items-center justify-between">
         <ul class="flex flex-row mt-0 mr-6 space-x-8 text-sm font-medium">
@@ -29,8 +29,7 @@
           </li>
           <li>
             <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"
-              class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">My
-              bids
+              class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">Orders
               <svg class="ml-1 w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -49,6 +48,9 @@
                 </li>
                 <li>
                   <router-link to="/offers/overview33" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Offers edit (router)</router-link>
+                </li>
+                <li>
+                  <router-link to="/offers/overview33" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Offers edit (managed)</router-link>
                 </li>
               </ul>
             </div>

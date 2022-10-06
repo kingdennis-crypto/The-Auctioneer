@@ -22,6 +22,13 @@ export class Offer {
         return this.statusses;
     }
 
+    static copyConstructor(offer) {
+        if (offer == null) return null;
+        let copy = Object.assign(new Object(), offer);
+        copy.sellDate = new Date(offer.sellDate);
+        return copy;
+    }
+
     static createSampleOffer(pId = 0) {
         function randomDate(start, end) {
             return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
