@@ -27,7 +27,7 @@
       </div>
       <div class="w-3/4">
         <div class="relative h-full">
-          <router-view v-if="selectedOffer" v-bind:item="selectedOffer" v-bind:hasChanged="checkChangesOffer()" @delete-selected="deleteOffer()" @save-selected="saveOffer()"/>
+          <router-view v-if="selectedOffer" v-bind:item="selectedOffer" @delete-selected="deleteOffer()" @save-selected="saveOffer"/>
           <div v-else class="h-full w-full absolute flex rounded-md">
             <p class="text-black text-2xl m-auto">No offer was selected</p>
           </div>
@@ -98,30 +98,18 @@ export default {
       }
     },
 
-    saveOffer() {
-      console.log("Hello");
-    },
+    saveOffer(item) {
+      let offerIndex = this.findSelectedOfferIndex(item.id);
 
-    checkChangesOffer() {
-      const id = this.selectedOffer.id;
-      const originalSelectedOffer = this.findSelectedRouteFromRouteParam(id);
-
-      if (
-        originalSelectedOffer.title !== this.selectedOffer.title ||
-        originalSelectedOffer.status !== this.selectedOffer.status ||
-        originalSelectedOffer.description !== this.selectedOffer.description ||
-        originalSelectedOffer.sellDate !== this.selectedOffer.sellDate ||
-        originalSelectedOffer.valueHighestBid !== this.selectedOffer.valueHighestBid
-      ) {
-        return true;
-      }
-
-      return false;
+      this.offers.splice(offerIndex, 1, item);
     },
 
     findSelectedRouteFromRouteParam(id) {
       return this.offers.find(element => element.id === parseInt(id));
     },
+    findSelectedOfferIndex(id) {
+      return this.offers.findIndex(element => element.id === id)
+    }
   },
 }
 </script>

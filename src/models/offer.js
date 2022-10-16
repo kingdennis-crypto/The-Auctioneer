@@ -48,4 +48,8 @@ export class Offer {
 
         return new Offer(pId, title, status, description, sellDate, valueHighestBid);
     }
+
+    static equals(other) {
+        return this === other;
+    }
 }
