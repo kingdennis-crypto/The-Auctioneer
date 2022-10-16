@@ -2,12 +2,16 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 // Components
 import WelcomeVue from '@/components/Welcome.vue';
+
+// Overview Pages
 import Overview33Vue from '@/components/offers/Overview33.vue';
 import Overview32Vue from '@/components/offers/Overview32.vue';
 import Overview31Vue from '@/components/offers/Overview31.vue';
-import UnkownRoute from '@/components/UnknownRoute.vue';
+import Overview34Vue from '@/components/offers/Overview34.vue';
+// Detail Pages
 import Detail32 from "@/components/offers/Detail32.vue";
 import Detail34 from "@/components/offers/Detail34.vue";
+import UnkownRoute from '@/components/UnknownRoute.vue';
 
 const routes = [
   { path: '/', component: WelcomeVue },
@@ -16,7 +20,7 @@ const routes = [
   { path: '/offers/overview33', component: Overview33Vue, children: [
       { path: ":id", component: Detail32}
     ]},
-  { path: '/offers/overview34', component: Overview33Vue, children: [
+  { path: '/offers/overview34', component: Overview34Vue, children: [
       { path: ":id", component: Detail34}
     ]},
   { path: '/:pathMatch(.*)', component: UnkownRoute },

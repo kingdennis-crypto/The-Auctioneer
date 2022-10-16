@@ -27,7 +27,7 @@
       </div>
       <div class="w-3/4">
         <div class="relative h-full">
-          <router-view v-if="selectedOffer" v-bind:item="selectedOffer" @delete-selected="deleteOffer()" />
+          <router-view v-if="selectedOffer" v-bind:item="selectedOffer" v-bind:hasChanged="checkChangesOffer()" @delete-selected="deleteOffer()" @save-selected="saveOffer()"/>
           <div v-else class="h-full w-full absolute flex rounded-md">
             <p class="text-black text-2xl m-auto">No offer was selected</p>
           </div>
@@ -41,7 +41,7 @@
 import { Offer } from "@/models/offer";
 
 export default {
-  name: "OffersOverview33",
+  name: "OffersOverview34",
   components: {},
 
   created() {
@@ -96,6 +96,27 @@ export default {
         this.offers = this.offers.filter(element => element.id !== this.selectedOffer.id)
         this.selectedOffer = null;
       }
+    },
+
+    saveOffer() {
+      console.log("Hello");
+    },
+
+    checkChangesOffer() {
+      const id = this.selectedOffer.id;
+      const originalSelectedOffer = this.findSelectedRouteFromRouteParam(id);
+
+      if (
+        originalSelectedOffer.title !== this.selectedOffer.title ||
+        originalSelectedOffer.status !== this.selectedOffer.status ||
+        originalSelectedOffer.description !== this.selectedOffer.description ||
+        originalSelectedOffer.sellDate !== this.selectedOffer.sellDate ||
+        originalSelectedOffer.valueHighestBid !== this.selectedOffer.valueHighestBid
+      ) {
+        return true;
+      }
+
+      return false;
     },
 
     findSelectedRouteFromRouteParam(id) {

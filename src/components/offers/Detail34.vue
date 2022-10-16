@@ -31,12 +31,39 @@
       </select>
     </div>
   </form>
-  <div class="w-full flex justify-end">
+  <div class="w-full flex justify-end gap-4">
+    <!-- Delete, Clear, Reset, Cancel, Save -->
     <button
         class="bg-red-500 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-red-600"
         @click="$emit('delete-selected')"
     >
-      Delete offer
+      Delete
+    </button>
+    <button
+        class="bg-red-500 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-red-600"
+        @click="$emit('delete-selected')"
+    >
+      Clear
+    </button>
+    <button
+        class="bg-yellow-400 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-yellow-600 disabled:cursor-not-allowed disabled:bg-yellow-200"
+        @click="$emit('delete-selected')"
+        disabled
+    >
+      Reset
+    </button>
+    <button
+        class="bg-red-500 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-red-600"
+        @click="$emit('delete-selected')"
+    >
+      Cancel
+    </button>
+    <button
+        class="bg-green-500 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-green-600 disabled:cursor-not-allowed disabled:bg-green-200"
+        @click="$emit('save-selected')"
+        disabled="{{ hasChanged }}"
+    >
+      Save
     </button>
   </div>
 </template>
@@ -48,18 +75,26 @@ import dateFormat from "dateformat";
 
 export default {
   name: "OffersDetail34",
-  props: ['item'],
-  emits: ['delete-selected'],
+  props: ['item', 'hasChanged'],
+  emits: ['delete-selected', 'save-selected'],
   data() {
     return {}
   },
   methods: {
-    onDelete() {
-    },
+    onDelete() {},
     getStatuses() {
       return Offer.getStatusses()
-    }
+    },
+    offerChanged() {
+      return this.item;
+    },
   },
+
+  // watch: {
+  //   item() {
+  //     Offer.copyConstructor(item);
+  //   }
+  // },
   computed: {
     mutableOffer() {
       return this.item.selectedOffer

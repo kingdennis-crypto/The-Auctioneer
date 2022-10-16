@@ -50,7 +50,7 @@
                   <router-link to="/offers/overview33" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Offers edit (router)</router-link>
                 </li>
                 <li>
-                  <router-link to="/offers/overview33" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Offers edit (managed)</router-link>
+                  <router-link to="/offers/overview34" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Offers edit (managed)</router-link>
                 </li>
               </ul>
             </div>
