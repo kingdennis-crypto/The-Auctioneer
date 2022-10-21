@@ -1,5 +1,9 @@
 package app.models;
 
+import app.views.CustomOfferView;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.time.LocalDate;
 
 public class Offer {
@@ -7,8 +11,11 @@ public class Offer {
     private static final String[] STATUSSES = {"NEW", "FOR_SALE", "SOLD", "PAID", "DELIVERED", "CLOSED", "EXPIRED", "WITHDRAWN"};
     private static final String[] DESCRIPTIONS = {"A characteristic, original toolset", "A modern comfort lamp", "A small comfortable lamp", "An antique cozy cabinet", "An antique cozy lamp", "A characteristic, cozy clock", "A small, robust bicycle", "A characteristic, original coat"};
 
+    @JsonView(CustomOfferView.Summary.class)
     private int id;
+    @JsonView(CustomOfferView.Summary.class)
     private String title;
+    @JsonView(CustomOfferView.Summary.class)
     private String status;
     private String description;
     private LocalDate sellDate;
