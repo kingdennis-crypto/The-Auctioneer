@@ -12,6 +12,8 @@ import Overview34Vue from '@/components/offers/Overview34.vue';
 import Detail32 from "@/components/offers/Detail32.vue";
 import Detail34 from "@/components/offers/Detail34.vue";
 import UnkownRoute from '@/components/UnknownRoute.vue';
+import Overview37 from "@/components/offers/Overview37";
+import Detail37 from "@/components/offers/Detail37";
 
 const routes = [
   { path: '/', component: WelcomeVue },
@@ -24,6 +26,9 @@ const routes = [
       { path: ":id", component: Detail34}
     ]},
   { path: '/:pathMatch(.*)', component: UnkownRoute },
+  { path: '/offers/overview37', component: Overview37, children: [
+      { path: ':id', component: Detail37 }
+    ]},
 ];
 
 export const router = createRouter({

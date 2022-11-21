@@ -29,7 +29,7 @@
   <div class="w-full flex justify-end gap-4">
     <button
         class="bg-red-500 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-red-600"
-        @click="$emit('delete-selected')"
+        @click="deleteOffer()"
     >
       Delete
     </button>
@@ -41,7 +41,7 @@
     </button>
     <button
         class="bg-yellow-400 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-yellow-600 disabled:cursor-not-allowed disabled:bg-yellow-200"
-        @click="revertChanges()" :disabled="setDisabled"
+        @click="revertChanges()" :disabled="hasChanged"
     >
       Revert
     </button>
@@ -53,7 +53,7 @@
     </button>
     <button
         class="bg-green-500 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-green-600 disabled:cursor-not-allowed disabled:bg-green-200"
-        @click="saveChanges()"
+        @click="saveChanges()" :disabled="hasChanged"
     >
       Save
     </button>
@@ -67,11 +67,10 @@ import dateFormat from "dateformat";
 export default {
   name: 'OffersDetail34',
   props: ['item'],
-  emits: ['delete-selected', 'save-selected'],
+  emits: ['delete-offer', 'reset-offer', 'cancel-offer', 'save-offer'],
   data() {
     return {
       selectedOfferCopy: null,
-      setDisabled: true
     }
   },
   created() {
@@ -83,29 +82,38 @@ export default {
     },
   },
   methods: {
-    onDelete() {},
     getStatuses() {
       return Offer.getStatusses()
     },
-    offerChanged() {
-      return this.item;
+    deleteOffer() {
+      this.$emit('delete-offer', this.selectedOfferCopy);
     },
     saveChanges() {
-      this.$emit('save-selected', this.selectedOfferCopy);
-      this.$router.push(this.$route.matched[0].path);
+      this.$emit('save-offer', this.selectedOfferCopy);
     },
     revertChanges() {
-      this.selectedOfferCopy = Offer.copyConstructor(this.item);
+      if (confirm("Are you sure you want to revert this offer?")) {
+        this.selectedOfferCopy = Offer.copyConstructor(this.item);
+      }
     },
     clearChanges() {
-      this.selectedOfferCopy.title = "";
-      this.selectedOfferCopy.description = "";
-      this.selectedOfferCopy.valueHighestBid = 0;
-      this.selectedOfferCopy.sellDate = new Date();
-      this.selectedOfferCopy.status = "NEW"
+      if (confirm("Are you sure you want to clear the form?")) {
+        this.selectedOfferCopy.title = "";
+        this.selectedOfferCopy.description = "";
+        this.selectedOfferCopy.valueHighestBid = 0;
+        this.selectedOfferCopy.sellDate = new Date();
+        this.selectedOfferCopy.status = "NEW"
+      }
     },
     cancelChanges() {
-      this.$router.push(this.$route.matched[0].path);
+      if (this.hasChanged) {
+        this.$router.push(this.$route.matched[0].path);
+        return;
+      }
+
+      if (confirm("Are you sure you want to cancel?")) {
+        this.$router.push(this.$route.matched[0].path);
+      }
     },
   },
   computed: {
@@ -127,10 +135,21 @@ export default {
       },
     },
     hasChanged() {
-      // Use event listener on input fields
-      const equals = Offer.equals(this.selectedOfferCopy);
-      console.log(equals);
-      return equals;
+      return Offer.equals(this.item, this.selectedOfferCopy);
+    }
+  },
+  beforeRouteUpdate(to, from) {
+    if (!this.hasChanged) {
+      if (confirm("CONFIRM")) {
+        console.log(to, from);
+      }
+    }
+  },
+  beforeRouteLeave(to, from) {
+    if (!this.hasChanged) {
+      if (confirm("Confirm")) {
+        console.log(to, from)
+      }
     }
   }
 }

@@ -61,7 +61,7 @@ public class OffersController {
     }
 
     @PutMapping(path = "{id}", produces = "application/json")
-    public Offer putOffer(@RequestBody Offer offer) {
+    public Offer putOffer(@PathVariable int id, @RequestBody Offer offer) {
         Offer putOffer = offersRepository.save(offer);
 
         if (putOffer == null) {

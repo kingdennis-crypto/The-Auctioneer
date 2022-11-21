@@ -27,7 +27,7 @@
       </div>
       <div class="w-3/4">
         <div class="relative h-full">
-          <router-view v-if="selectedOffer" v-bind:item="selectedOffer" @delete-selected="deleteOffer()" @save-selected="saveOffer"/>
+          <router-view v-if="selectedOffer" v-bind:item="selectedOffer" @delete-offer="deleteOffer()" @save-offer="saveOffer"/>
           <div v-else class="h-full w-full absolute flex rounded-md">
             <p class="text-black text-2xl m-auto">No offer was selected</p>
           </div>
@@ -101,7 +101,12 @@ export default {
     saveOffer(item) {
       let offerIndex = this.findSelectedOfferIndex(item.id);
 
-      this.offers.splice(offerIndex, 1, item);
+      if (Offer.isFilledIn(item)) {
+        this.offers.splice(offerIndex, 1, item);
+        this.$router.push(this.$route.matched[0].path);
+      } else {
+        alert("You haven't filled in all fields!")
+      }
     },
 
     findSelectedRouteFromRouteParam(id) {
