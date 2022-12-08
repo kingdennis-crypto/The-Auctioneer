@@ -60,6 +60,12 @@ public class OffersRepositoryMockImpl implements OffersRepository {
     public Offer save(Offer offer) {
         int index = offers.indexOf(offer);
 
+        if (offer.getId() == 0) {
+            long lastId = offers.get(offers.size() - 1).getId();
+
+            offer.setId(lastId + 3);
+        }
+
         if (index == -1) {
             offers.add(offer);
         } else {

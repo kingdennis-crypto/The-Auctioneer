@@ -28,18 +28,21 @@ export class OffersAdaptor {
 
     async asyncSave(offer) {
         console.log(offer);
-        // const options = {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(offer)
-        // }
-        //
-        // return await this.fetchJson(this.resourcesUrl, options)
+
+        return await this.fetchJson(this.resourcesUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(offer)
+        });
     }
 
     async asyncDeleteById(id) {
-        return await this.fetchJson(`${this.resourceUrl}/${id}`);
+        // console.log(`${(this.resourceUrl)}/${id}`);
+        console.log(this.resourcesUrl);
+        return await this.fetchJson(`${this.resourcesUrl}/${id}`, {
+            method: 'DELETE'
+        });
     }
 }

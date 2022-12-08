@@ -27,7 +27,7 @@
       </div>
       <div class="w-3/4">
         <div class="relative h-full">
-          <router-view v-if="selectedOffer" v-bind:item="selectedOffer" @delete-selected="deleteOffer()" @save-selected="saveOffer"/>
+          <router-view v-if="selectedOffer" v-bind:item="selectedOffer" @delete-offer="deleteOffer()" @save-offer="saveOffer"/>
           <div v-else class="h-full w-full absolute flex rounded-md">
             <p class="text-black text-2xl m-auto">No offer was selected</p>
           </div>
@@ -41,17 +41,14 @@
 import { Offer } from "@/models/offer";
 
 export default {
-  name: "OffersOverview34",
-  inject: ['offersService'],
+  name: "OffersOverview37",
   components: {},
+  inject: ['offersService'],
 
   async created() {
-    // for (let i = 0; i < 8; i++) {
-    //   this.offers.push(Offer.createSampleOffer(this.nextId));
-    //   this.nextId = this.nextId + 3;
-    // }
     this.offers = await this.offersService.asyncFindAll();
-    this.selectedOffer = this.findSelectedRouteFromRouteParam(this.$route);
+    this.selectedOffer = this.findSelectedRouteFromRouteParam(this.$route.params.id);
+    this.nextId = this.offers[this.offers.length - 1].id;
   },
 
   data() {
@@ -73,11 +70,15 @@ export default {
 
   methods: {
     onNewOffer: function () {
+      this.nextId += 3;
+
       const newOffer = Offer.createSampleOffer(this.nextId);
       this.selectedOffer = newOffer
 
+      this.offersService.asyncSave(newOffer);
+
       this.offers.push(newOffer);
-      this.nextId = this.nextId + 3;
+      this.selectItem(newOffer)
     },
 
     selectItem(element) {
@@ -96,18 +97,27 @@ export default {
 
     deleteOffer() {
       if (confirm("Are you sure you want to delete this offer?")) {
-        // this.offers = this.offers.filter(element => element.id !== this.selectedOffer.id)
-        // this.selectedOffer = null;
         this.offersService.asyncDeleteById(this.selectedOffer.id);
+        this.offers = this.offers.filter(element => element.id !== this.selectedOffer.id)
+
+        this.selectedOffer = null;
+        this.$router.push(this.$route.matched[0].path);
       }
     },
 
     saveOffer(item) {
-      // let offerIndex = this.findSelectedOfferIndex(item.id);
-      //
-      // this.offers.splice(offerIndex, 1, item);
+      let offerIndex = this.findSelectedOfferIndex(item.id);
 
-      this.offersService.asyncSave(item);
+      if (Offer.isFilledIn(item)) {
+        this.offers.splice(offerIndex, 1, item);
+        const savedOffer = this.offersService.asyncSave(item);
+
+        this.offers.map((element) => element.id === savedOffer.id ? savedOffer : element)
+
+        this.$router.push(this.$route.matched[0].path);
+      } else {
+        alert("You haven't filled in all fields!")
+      }
     },
 
     findSelectedRouteFromRouteParam(id) {

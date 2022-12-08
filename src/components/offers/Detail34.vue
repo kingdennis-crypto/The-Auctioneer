@@ -115,6 +115,19 @@ export default {
         this.$router.push(this.$route.matched[0].path);
       }
     },
+
+    leaveRouteConfirm(){
+      return (this.hasChanged && !confirm('Changes that you made may not be saved.'))
+    },
+
+    beforeWindowUnload(e){
+      if (this.leaveRouteConfirm()){
+        // cancel event
+        e.preventDefault()
+        //requires a return value
+        e.returnValue =''
+      }
+    },
   },
   computed: {
     mutableOffer() {
@@ -138,19 +151,19 @@ export default {
       return Offer.equals(this.item, this.selectedOfferCopy);
     }
   },
-  beforeRouteUpdate(to, from) {
-    if (!this.hasChanged) {
-      if (confirm("CONFIRM")) {
-        console.log(to, from);
-      }
-    }
+
+  // Unsaved changes on route change
+  beforeRouteLeave(){
+    return (this && !this.leaveRouteConfirm());
   },
-  beforeRouteLeave(to, from) {
-    if (!this.hasChanged) {
-      if (confirm("Confirm")) {
-        console.log(to, from)
-      }
-    }
+  beforeRouteUpdate(){
+    return (this && !this.leaveRouteConfirm());
+  },
+  mounted(){
+    addEventListener('beforeunload', this.beforeWindowUnload)
+  },
+  beforeUnmount(){
+    removeEventListener('beforeunload', this.beforeWindowUnload)
   }
 }
 </script>

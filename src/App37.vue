@@ -8,6 +8,9 @@
 import AuctionNavbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 import { OffersAdaptor } from "@/services/offers-adaptor";
+import {reactive} from "vue";
+import {CachedOffersAdaptor} from "@/services/cached-offers-adaptor";
+import {Offer} from "@/models/offer";
 
 export default {
   name: 'App',
@@ -17,7 +20,8 @@ export default {
   },
   provide() {
     return {
-      offersService: new OffersAdaptor("http://localhost:8083/offers")
+      offersService: new OffersAdaptor("http://localhost:8083/offers"),
+      cachedOffersService: reactive(new CachedOffersAdaptor("http://localhost:8083/offers", Offer.copyConstructor()))
     }
   }
 }

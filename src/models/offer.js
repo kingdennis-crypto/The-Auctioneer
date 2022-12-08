@@ -57,19 +57,12 @@ export class Offer {
         const description = givenOffer.description !== "";
         const sellDate = givenOffer.sellDate !== "";
         const valueHighestBid = givenOffer.valueHighestBid !== "";
-        
+
         console.log(id && title && status && description && sellDate && valueHighestBid);
         return id && title && status && description && sellDate && valueHighestBid;
     }
 
-    static equals(thisOffer, otherOffer) {
-        const idEqual = (thisOffer.id === otherOffer.id);
-        const titleEqual = (thisOffer.title === otherOffer.title);
-        const statusEqual = (thisOffer.status === otherOffer.status);
-        const descriptionEqual = (thisOffer.description === otherOffer.description);
-        const sellDateEqual = (new Date(thisOffer.sellDate).getTime() === new Date(otherOffer.sellDate).getTime());
-        const valueHighestBidEqual = (thisOffer.valueHighestBid === otherOffer.valueHighestBid);
-
-        return idEqual && titleEqual && statusEqual && descriptionEqual && sellDateEqual && valueHighestBidEqual;
+    static equals(other) {
+        return JSON.stringify(this) === JSON.stringify(other);
     }
 }
