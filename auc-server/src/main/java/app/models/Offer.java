@@ -18,6 +18,8 @@ import java.util.*;
                 query = "SELECT o FROM Offer o INNER JOIN Bid b ON b.offer = o WHERE o.status=?1 AND b.bidValue > ?2") // FIXME fix the minimum value bid
 })
 
+// TODO - Add a query to delete the offers when deleting the
+
 @Entity
 public class Offer implements Identifiable {
     private static final String[] TITLES = {"toolset", "lamp", "lamp", "cabinet", "lamp", "clock", "bicycle", "coat"};

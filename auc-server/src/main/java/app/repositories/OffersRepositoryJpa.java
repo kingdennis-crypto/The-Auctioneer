@@ -1,5 +1,6 @@
 package app.repositories;
 
+import app.models.Bid;
 import app.models.Offer;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -68,7 +69,13 @@ public class OffersRepositoryJpa
     @Override
     public Offer deleteById(long id) {
         Offer offer = findById(id);
+        List<Bid> bids = offer.getBids();
         entityManager.remove(offer);
+
+        for (Bid bid : bids) {
+            entityManager.remove(bid);
+        }
+
         return offer;
     }
 }

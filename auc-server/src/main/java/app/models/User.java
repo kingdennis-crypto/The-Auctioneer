@@ -1,0 +1,82 @@
+package app.models;
+
+import app.repositories.Identifiable;
+import app.views.CustomOfferView;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "CUSTOM_USER") // Prevent SQL error for using reserved keyword
+public class User implements Identifiable {
+    @Id
+    @GeneratedValue
+    @JsonView(CustomOfferView.Summary.class)
+    private long id;
+
+    @JsonView(CustomOfferView.Summary.class)
+    private String name;
+
+    @JsonView(CustomOfferView.Summary.class)
+    private String email;
+
+    @JsonView(CustomOfferView.Summary.class)
+    private String hashedPassword;
+
+    @JsonView(CustomOfferView.Summary.class)
+    private String role;
+
+    public User(String email, String hashedPassword) {
+        this.name = email.substring(0, email.indexOf('@'));
+        this.email = email;
+        this.hashedPassword = hashedPassword;
+        this.role = "Registered User";
+    }
+
+    protected User() {}
+
+    @Override
+    public long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+}
