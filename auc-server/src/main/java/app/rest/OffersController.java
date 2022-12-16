@@ -4,6 +4,8 @@ import app.exceptions.NotFoundException;
 import app.exceptions.PreConditionFailed;
 import app.models.Offer;
 import app.repositories.OffersRepositoryMock;
+import app.views.CustomOfferView;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/offers")
@@ -36,6 +39,7 @@ public class OffersController {
 
     @PostMapping("")
     public Offer create(@RequestBody Offer offer) {
+        if (offer.getId() == 0) offer.setId(new Random().nextInt(40000, 50000));
         Offer savedOffer = offersRepo.save(offer);
 
         URI location = ServletUriComponentsBuilder
@@ -69,5 +73,11 @@ public class OffersController {
         }
 
         return offersRepo.save(toMergeOffer);
+    }
+
+    @GetMapping("/summary")
+    @JsonView(CustomOfferView.Summary.class)
+    public List<Offer> getAllScootersSummary() {
+        return offersRepo.findAll();
     }
 }

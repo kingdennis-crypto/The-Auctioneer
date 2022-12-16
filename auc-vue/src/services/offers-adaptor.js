@@ -14,7 +14,7 @@ export class OffersAdaptor {
         } else {
             // The response body provides the http-error information
             console.log(response, !response.bodyUsed ? await response.text() : "");
-            return null
+            return null;
         }
     }
 
@@ -22,13 +22,15 @@ export class OffersAdaptor {
         return await this.fetchJson(this.resourcesUrl);
     }
 
+    async asyncFindAllSummary() {
+        return await this.fetchJson(this.resourcesUrl + '/summary');
+    }
+
     async asyncFindById(id) {
-        return await this.fetchJson(`${this.resourceUrl}/${id}`);
+        return await this.fetchJson(`${this.resourcesUrl}/${id}`);
     }
 
     async asyncSave(offer) {
-        console.log(offer);
-
         return await this.fetchJson(this.resourcesUrl, {
             method: 'POST',
             headers: {
@@ -39,8 +41,6 @@ export class OffersAdaptor {
     }
 
     async asyncDeleteById(id) {
-        // console.log(`${(this.resourceUrl)}/${id}`);
-        console.log(this.resourcesUrl);
         return await this.fetchJson(`${this.resourcesUrl}/${id}`, {
             method: 'DELETE'
         });

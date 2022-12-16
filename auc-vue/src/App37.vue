@@ -1,7 +1,7 @@
 <template>
   <AuctionNavbar />
   <router-view/>
-  <Footer />
+<!--  <Footer />-->
 </template>
 
 <script>
@@ -16,7 +16,7 @@ export default {
   name: 'App',
   components: {
     AuctionNavbar,
-    Footer,
+    // Footer,
   },
   provide() {
     return {

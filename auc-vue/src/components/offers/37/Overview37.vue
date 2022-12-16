@@ -12,9 +12,10 @@
           </thead>
           <tbody>
             <tr v-for="(item) in offers" :key="item.id">
-              <td @click="selectItem(item)"
+              <td
+                @click="selectItem(item)"
                 class="py-4 px-6 font-medium whitespace-nowrap dark:text-white cursor-pointer rounded-sm [&:not(.bg-blue-500)]:hover:bg-gray-100"
-                :class="[ selectedOffer?.id === item.id ? selectedRowStyle : notSelectedRowStyle ]">
+                :class="[ selectedOfferId === item.id ? selectedRowStyle : notSelectedRowStyle ]">
                 {{ item.title }}
               </td>
             </tr>
@@ -27,7 +28,7 @@
       </div>
       <div class="w-3/4">
         <div class="relative h-full">
-          <router-view v-if="selectedOffer" v-bind:item="selectedOffer" @delete-offer="deleteOffer()" @save-offer="saveOffer"/>
+          <router-view v-if="offerIsSelected" v-bind:item="selectedOffer" @getOffers="getAllOffers"/>
           <div v-else class="h-full w-full absolute flex rounded-md">
             <p class="text-black text-2xl m-auto">No offer was selected</p>
           </div>
@@ -42,13 +43,10 @@ import { Offer } from "@/models/offer";
 
 export default {
   name: "OffersOverview37",
-  components: {},
-  inject: ['offersService'],
+  inject: ["offersService"],
 
-  async created() {
-    this.offers = await this.offersService.asyncFindAll();
-    this.selectedOffer = this.findSelectedRouteFromRouteParam(this.$route.params.id);
-    this.nextId = this.offers[this.offers.length - 1].id;
+  created() {
+    this.getAllOffers();
   },
 
   data() {
@@ -62,13 +60,27 @@ export default {
     }
   },
 
-  watch: {
-    '$route'() {
-      this.selectedOffer = this.findSelectedRouteFromRouteParam(this.$route.params.id);
+  // watch: {
+  //   '$route'() {
+  //     this.selectedOfferId = this.$route.params.id;
+  //   }
+  // },
+
+  computed: {
+    offerIsSelected() {
+      return this.$route.params.id !== null;
+    },
+    selectedOfferId() {
+      return parseInt(this.$route.params.id);
     }
   },
 
   methods: {
+    async getAllOffers() {
+      this.offers = await this.offersService.asyncFindAllSummary();
+      this.nextId = this.offers[this.offers.length - 1].id;
+    },
+
     onNewOffer: function () {
       this.nextId += 3;
 
@@ -95,30 +107,30 @@ export default {
       }
     },
 
-    deleteOffer() {
-      if (confirm("Are you sure you want to delete this offer?")) {
-        this.offersService.asyncDeleteById(this.selectedOffer.id);
-        this.offers = this.offers.filter(element => element.id !== this.selectedOffer.id)
-
-        this.selectedOffer = null;
-        this.$router.push(this.$route.matched[0].path);
-      }
-    },
-
-    saveOffer(item) {
-      let offerIndex = this.findSelectedOfferIndex(item.id);
-
-      if (Offer.isFilledIn(item)) {
-        this.offers.splice(offerIndex, 1, item);
-        const savedOffer = this.offersService.asyncSave(item);
-
-        this.offers.map((element) => element.id === savedOffer.id ? savedOffer : element)
-
-        this.$router.push(this.$route.matched[0].path);
-      } else {
-        alert("You haven't filled in all fields!")
-      }
-    },
+    // deleteOffer() {
+    //   if (confirm("Are you sure you want to delete this offer?")) {
+    //     this.offersService.asyncDeleteById(this.selectedOffer.id);
+    //     this.offers = this.offers.filter(element => element.id !== this.selectedOffer.id)
+    //
+    //     this.selectedOffer = null;
+    //     this.$router.push(this.$route.matched[0].path);
+    //   }
+    // },
+    //
+    // saveOffer(item) {
+    //   let offerIndex = this.findSelectedOfferIndex(item.id);
+    //
+    //   if (Offer.isFilledIn(item)) {
+    //     this.offers.splice(offerIndex, 1, item);
+    //     const savedOffer = this.offersService.asyncSave(item);
+    //
+    //     this.offers.map((element) => element.id === savedOffer.id ? savedOffer : element)
+    //
+    //     this.$router.push(this.$route.matched[0].path);
+    //   } else {
+    //     alert("You haven't filled in all fields!")
+    //   }
+    // },
 
     findSelectedRouteFromRouteParam(id) {
       return this.offers.find(element => element.id === parseInt(id));
