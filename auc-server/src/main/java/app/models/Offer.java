@@ -1,69 +1,32 @@
 package app.models;
 
-import app.repositories.Identifiable;
 import app.views.CustomOfferView;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Random;
 
-@NamedQueries({
-        @NamedQuery(name = "Offer_find_by_status",
-                query = "SELECT o FROM Offer o WHERE o.status=?1"),
-        @NamedQuery(name = "Offer_find_by_title",
-                query = "SELECT o FROM Offer o WHERE o.title=?1"),
-        @NamedQuery(name = "Offer_find_by_status_and_minBidValue",
-                query = "SELECT o FROM Offer o INNER JOIN Bid b ON b.offer = o WHERE o.status=?1 AND b.bidValue > ?2") // FIXME fix the minimum value bid
-})
-
-// TODO - Add a query to delete the offers when deleting the
-
-@Entity
-public class Offer implements Identifiable {
-    private static final String[] TITLES = {"toolset", "lamp", "lamp", "cabinet", "lamp", "clock", "bicycle", "coat"};
+public class Offer {
+    private static final String[] TITLES = {"toolset", "lamp", "cabinet", "clock", "bicycle", "coat"};
+    private static final String[] STATUSSES = {"NEW", "FOR_SALE", "SOLD", "PAID", "DELVIERED", "CLOSED", "EXPIRED", "WITHDRAWN"};
     private static final String[] DESCRIPTIONS = {"A characteristic, original toolset", "A modern comfort lamp", "A small comfortable lamp", "An antique cozy cabinet", "An antique cozy lamp", "A characteristic, cozy clock", "A small, robust bicycle", "A characteristic, original coat"};
 
-    public enum STATUS {
-        NEW, FOR_SALE, SOLD, PAID, DELIVERED, CLOSED, EXPIRED, WITHDRAWN
-    };
-
     @JsonView(CustomOfferView.Summary.class)
-    @Id
-    private long id;
+    private int id;
+
     @JsonView(CustomOfferView.Summary.class)
     private String title;
+
     @JsonView(CustomOfferView.Summary.class)
-    @Enumerated(EnumType.ORDINAL)
-    private STATUS status;
-    @JsonView(CustomOfferView.Summary.class)
+    private String status;
+
     private String description;
-    @JsonView(CustomOfferView.Summary.class)
     private LocalDate sellDate;
-    @JsonView(CustomOfferView.Summary.class)
     private int valueHighestBid;
 
-    @OneToMany(mappedBy = "offer")
-    @JsonSerialize(using = CustomOfferView.ShallowSerializer.class)
-    private List<Bid> bids;
-
-    public Offer(int id) {
+    public Offer(int id, String title, String status, String description, LocalDate sellDate, int valueHighestBid) {
         this.id = id;
-        this.bids = new ArrayList<>();
 
-        Offer newOffer = this.createSampleOffer(id);
-        this.title = newOffer.title;
-        this.status = newOffer.status;
-        this.description = newOffer.description;
-        this.sellDate = newOffer.sellDate;
-        this.valueHighestBid = newOffer.valueHighestBid;
-    }
-
-    public Offer(int id, String title, STATUS status, String description, LocalDate sellDate, int valueHighestBid) {
-        this.bids = new ArrayList<>();
-
-        this.id = id;
         this.title = title;
         this.status = status;
         this.description = description;
@@ -71,78 +34,29 @@ public class Offer implements Identifiable {
         this.valueHighestBid = valueHighestBid;
     }
 
-    public Offer() { super(); }
-
-    public Offer copyConstructor(Offer offer) {
-        return offer;
-    }
-
-    /**
-     * Associates the given bid with this offer, if not yet associated
-     * and only if the value of the bid exceeds currently the highest bid on this offer
-     * @param bid
-     * @return Wheter a new association has been added
-     */
-    public boolean associateBid(Bid bid) {
-        if (bid != null && bid.getOffer() == null) {
-            bids.add(bid);
-
-            setValueHighestBid((int) bid.getBidValue());
-
-            return bid.associateOffer(this);
-        }
-
-        return false;
-    }
-
-    /**
-     * Dissociates the given bid from this offer, if associated
-     * @param bid
-     * @return Wheter an existing association has been removed
-     */
-    public boolean dissocateBid(Bid bid) {
-        if (bid != null && bid.getOffer() != null) {
-            return this.bids.remove(bid) && bid.associateOffer(null);
-        }
-
-        return false;
-    }
-
-
-    public static Offer createSampleOffer(int pId) {
-        if (pId == 0) pId = new Random().nextInt(40000, 50000);
+    public static Offer createSampleOffer(int id) {
+        Random random = new Random();
 
         LocalDate sellDate = LocalDate.now();
-        int valueHighestBid = (int) Math.floor(Math.random() * 100);
+        int valueHighestBid = random.nextInt(1000);
 
-        String title = TITLES[(int) Math.floor(Math.random() * TITLES.length)];
-        STATUS status = STATUS.NEW;
-        String description = DESCRIPTIONS[(int) Math.floor(Math.random() * DESCRIPTIONS.length)];
+        String title = TITLES[random.nextInt(TITLES.length)];
+        String status = STATUSSES[random.nextInt(STATUSSES.length)];
+        String description = DESCRIPTIONS[random.nextInt(DESCRIPTIONS.length)];
 
-        return new Offer(pId, title, status, description, sellDate, valueHighestBid);
+        return new Offer(id, title, status, description, sellDate, valueHighestBid);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Offer offer = (Offer) o;
-        return id == offer.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    @Override
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public Offer copyConstructor(Offer offer) {
+        return offer;
     }
 
     public String getTitle() {
@@ -153,11 +67,11 @@ public class Offer implements Identifiable {
         this.title = title;
     }
 
-    public STATUS getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(STATUS status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -184,14 +98,4 @@ public class Offer implements Identifiable {
     public void setValueHighestBid(int valueHighestBid) {
         this.valueHighestBid = valueHighestBid;
     }
-
-    public List<Bid> getBids() {
-        return bids;
-    }
-
-    public void setBids(List<Bid> bids) {
-        this.bids = bids;
-    }
 }
-
-
