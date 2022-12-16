@@ -4,18 +4,18 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import WelcomeVue from '@/components/Welcome.vue';
 
 // Overview Pages
-import Overview33Vue from '@/components/offers/Overview33.vue';
-import Overview32Vue from '@/components/offers/Overview32.vue';
-import Overview31Vue from '@/components/offers/Overview31.vue';
-import Overview34Vue from '@/components/offers/Overview34.vue';
-import Overview37Vue from "@/components/offers/Overview37.vue";
-import Overview37cached from "@/components/offers/Overview37cached";
+import Overview33Vue from '@/components/offers/33/Overview33.vue';
+import Overview32Vue from '@/components/offers/32/Overview32.vue';
+import Overview31Vue from '@/components/offers/31/Overview31.vue';
+import Overview34Vue from '@/components/offers/34/Overview34.vue';
+import Overview37Vue from "@/components/offers/37/Overview37.vue";
+import Overview37cached from "@/components/offers/37/Overview37cached";
 
 // Detail Pages
-import Detail32 from "@/components/offers/Detail32.vue";
-import Detail34 from "@/components/offers/Detail34.vue";
-import Detail37 from "@/components/offers/Detail37";
-import Detail37cached from "@/components/offers/Detail37cached";
+import Detail32 from "@/components/offers/32/Detail32.vue";
+import Detail34 from "@/components/offers/34/Detail34.vue";
+import Detail37 from "@/components/offers/37/Detail37";
+import Detail37cached from "@/components/offers/37/Detail37cached";
 
 // Miscellaneous
 import UnkownRoute from '@/components/UnknownRoute.vue';

@@ -9,7 +9,7 @@
 // import AuctionWelcome from './components/Welcome.vue';
 import AuctionNavbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
-import Overview32 from "./components/offers/Overview32.vue";
+import Overview32 from "./components/offers/32/Overview32.vue";
 
 export default {
   name: 'App31',
