@@ -3,7 +3,7 @@
     <p>This item was not found</p>
   </div>
   <!-- If on load no offer was selected -->
-  <div v-else-if="selectedOffer === null && selectedOfferCopy === null" class="w-full h-full flex flex-col items-center justify-center">
+  <div v-else-if="offer === null && offerCopy === null" class="w-full h-full flex flex-col items-center justify-center">
     <div role="status">
       <svg aria-hidden="true" class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -16,20 +16,20 @@
   </div>
   <div v-else>
     <div class="text-xs mb-3 text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-      <p class="py-5 px-6 font-bold">Offer detail (id={{ selectedOfferCopy.id }})</p>
+      <p class="py-5 px-6 font-bold">Offer detail (id={{ offerCopy.id }})</p>
     </div>
     <form class="text-left">
       <div class="mb-6">
         <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Title</label>
-        <input type="text" id="title" placeholder="The title of a auction piece" v-model="selectedOfferCopy.title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+        <input type="text" id="title" placeholder="The title of a auction piece" v-model="offerCopy.title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
       </div>
       <div class="mb-6">
         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Description</label>
-        <input type="text" id="description" placeholder="Description of auction piece" v-model="selectedOfferCopy.description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+        <input type="text" id="description" placeholder="Description of auction piece" v-model="offerCopy.description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
       </div>
       <div class="mb-6">
         <label for="highestBid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Highest bid</label>
-        <input type="text" id="highestBid" placeholder="The highest bid of the auction bid" v-model="selectedOfferCopy.valueHighestBid" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+        <input type="text" id="highestBid" placeholder="The highest bid of the auction bid" v-model="offerCopy.valueHighestBid" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
       </div>
       <div class="mb-6">
         <label for="highestBid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sell date</label>
@@ -37,7 +37,7 @@
       </div>
       <div class="mb-6">
         <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Status</label>
-        <select id="status" v-model="selectedOfferCopy.status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <select id="status" v-model="offerCopy.status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
           <option v-for="(status, index) in getStatuses()" :key="index">{{ status }}</option>
         </select>
       </div>
@@ -88,8 +88,8 @@ export default {
   inject: ['offersService'],
   data() {
     return {
-      selectedOffer: null,
-      selectedOfferCopy: null,
+      offer: null,
+      offerCopy: null,
       notFound: false,
     }
   },
@@ -108,19 +108,18 @@ export default {
       const request = await this.offersService.asyncFindById(id);
 
       if (request === null) {
-        console.log("NOT FOUND");
         this.notFound = true;
-        this.selectedOffer = null;
-        this.selectedOfferCopy = null;
+        this.offer = null;
+        this.offerCopy = null;
 
         return;
       }
 
       this.notFound = false;
-      this.selectedOffer = request;
-      this.selectedOfferCopy = Offer.copyConstructor(request);
+      this.offer = request;
+      this.offerCopy = Offer.copyConstructor(request);
 
-      console.log(this.selectedOffer);
+      console.log(this.offer);
     },
 
     getStatuses() {
@@ -131,13 +130,13 @@ export default {
         return;
       }
 
-      this.offersService.asyncDeleteById(this.selectedOfferCopy.id);
+      this.offersService.asyncDeleteById(this.offerCopy.id);
       this.$router.push(this.$route.matched[0].path);
 
       this.$emit('getOffers');
     },
     saveChanges() {
-      if (!Offer.isFilledIn(this.selectedOfferCopy)) {
+      if (!Offer.isFilledIn(this.offerCopy)) {
         return alert("You haven't filled in all the fields");
       }
 
@@ -145,21 +144,21 @@ export default {
         return;
       }
 
-      this.offersService.asyncSave(this.selectedOfferCopy);
+      this.offersService.asyncSave(this.offerCopy);
       this.$emit('getOffers');
     },
     revertChanges() {
       if (confirm("Are you sure you want to revert this offer?")) {
-        this.selectedOfferCopy = Offer.copyConstructor(this.selectedOffer);
+        this.offerCopy = Offer.copyConstructor(this.offer);
       }
     },
     clearChanges() {
       if (confirm("Are you sure you want to clear the form?")) {
-        this.selectedOfferCopy.title = "";
-        this.selectedOfferCopy.description = "";
-        this.selectedOfferCopy.valueHighestBid = 0;
-        this.selectedOfferCopy.sellDate = new Date();
-        this.selectedOfferCopy.status = "NEW"
+        this.offerCopy.title = "";
+        this.offerCopy.description = "";
+        this.offerCopy.valueHighestBid = 0;
+        this.offerCopy.sellDate = new Date();
+        this.offerCopy.status = "NEW"
       }
     },
     cancelChanges() {
@@ -188,12 +187,12 @@ export default {
   },
   computed: {
     mutableOffer() {
-      return this.selectedOffer
+      return this.offer
     },
     sellDateUpdater: {
       // eslint-disable-next-line vue/return-in-computed-property
       get() {
-        const sellDate = dateFormat(this.selectedOfferCopy.sellDate, "yyyy-mm-dd")
+        const sellDate = dateFormat(this.offerCopy.sellDate, "yyyy-mm-dd")
         return sellDate;
       },
       // eslint-disable-next-line no-unused-vars
@@ -201,11 +200,11 @@ export default {
         const newDate = new Date(localDateTime);
 
         // eslint-disable-next-line
-        this.selectedOfferCopy.sellDate = newDate;
+        this.offerCopy.sellDate = newDate;
       },
     },
     hasChanged() {
-      return Offer.equals(this.selectedOffer, this.selectedOfferCopy);
+      return Offer.equals(this.offer, this.offerCopy);
     },
   },
 
