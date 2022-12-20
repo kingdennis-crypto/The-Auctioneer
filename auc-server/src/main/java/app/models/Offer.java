@@ -33,8 +33,13 @@ public class Offer {
     @JsonView(CustomOfferView.Summary.class)
     private int valueHighestBid;
 
+    @OneToMany(mappedBy = "offer")
+//    @JsonSerialize(using = CustomOfferView.ShallowSerializer.class)
+    private List<Bid> bids;
+
     public Offer(int id) {
         this.id = id;
+        this.bids = new ArrayList<>();
 
         Offer newOffer = this.createSampleOffer(id);
         this.title = newOffer.title;
@@ -45,6 +50,8 @@ public class Offer {
     }
 
     public Offer(int id, String title, STATUS status, String description, LocalDate sellDate, int valueHighestBid) {
+        this.bids = new ArrayList<>();
+
         this.id = id;
         this.title = title;
         this.status = status;
@@ -133,6 +140,37 @@ public class Offer {
 
     public void setValueHighestBid(int valueHighestBid) {
         this.valueHighestBid = valueHighestBid;
+    }
+
+    /**
+     * Associates the given bid with this offer, if not yet associated
+     * and only if the value of the bid exceeds currently the highest bid on this offer
+     * @param bid
+     * @return Wheter a new association has been added
+     */
+    public boolean associateBid(Bid bid) {
+        if (bid != null && bid.getOffer() == null) {
+            bids.add(bid);
+
+            setValueHighestBid((int) bid.getBidValue());
+
+            return bid.associateOffer(this);
+        }
+
+        return false;
+    }
+
+    /**
+     * Dissociates the given bid from this offer, if associated
+     * @param bid
+     * @return Wheter an existing association has been removed
+     */
+    public boolean dissocateBid(Bid bid) {
+        if (bid != null && bid.getOffer() != null) {
+            return this.bids.remove(bid) && bid.associateOffer(null);
+        }
+
+        return false;
     }
 }
 
