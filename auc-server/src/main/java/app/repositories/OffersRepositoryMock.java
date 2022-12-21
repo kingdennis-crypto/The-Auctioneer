@@ -15,12 +15,9 @@ public class OffersRepositoryMock implements OffersRepository {
     public OffersRepositoryMock() {
         offers = new ArrayList<>();
 
-        int id = 30000;
-
         for (int i = 0; i < 9; i++) {
-            Offer offer = Offer.createSampleOffer(id);
+            Offer offer = Offer.createSampleOffer();
             offers.add(offer);
-            id += 3;
         }
 
     }

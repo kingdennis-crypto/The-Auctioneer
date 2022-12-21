@@ -1,5 +1,6 @@
 package app.models;
 
+import app.repositories.Identifiable;
 import app.views.CustomOfferView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -8,7 +9,7 @@ import javax.persistence.*;
 import java.util.Random;
 
 @Entity
-public class Bid {
+public class Bid implements Identifiable {
     @Id
     @GeneratedValue
     @JsonView(CustomOfferView.Shallow.class)
@@ -19,7 +20,7 @@ public class Bid {
 
     @JsonIgnore // Added this because I got errors with the GET request
     @ManyToOne()
-//    @JsonView(CustomOfferView.ShallowSerializer.class)
+    @JsonView(CustomOfferView.Shallow.class)
     private Offer offer;
 
     protected Bid() {}
@@ -28,12 +29,12 @@ public class Bid {
         this.bidValue = value;
     }
 
-//    @Override
+    @Override
     public long getId() {
         return id;
     }
 
-//    @Override
+    @Override
     public void setId(long id) {
         this.id = id;
     }
@@ -55,7 +56,7 @@ public class Bid {
     }
 
     public static Bid createSampleBid() {
-        double value = new Random().nextDouble(0, 9999);
+        double value = new Random().nextDouble(0, 50);
 
         Bid bid = new Bid(value);
 //        bid.associateOffer(offer);

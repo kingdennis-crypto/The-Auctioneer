@@ -41,7 +41,7 @@ public class Offer {
         this.id = id;
         this.bids = new ArrayList<>();
 
-        Offer newOffer = this.createSampleOffer(id);
+        Offer newOffer = createSampleOffer();
         this.title = newOffer.title;
         this.status = newOffer.status;
         this.description = newOffer.description;
@@ -66,8 +66,8 @@ public class Offer {
         return offer;
     }
 
-    public static Offer createSampleOffer(int pId) {
-        if (pId == 0) pId = new Random().nextInt(40000, 50000);
+    public static Offer createSampleOffer() {
+        int pId = new Random().nextInt(40000, 50000);
 
         LocalDate sellDate = LocalDate.now();
         int valueHighestBid = (int) Math.floor(Math.random() * 100);

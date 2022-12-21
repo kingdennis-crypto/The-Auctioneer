@@ -1,6 +1,8 @@
 package app;
 
+import app.models.Bid;
 import app.models.Offer;
+import app.repositories.BidsRepositoryJpa;
 import app.repositories.OffersRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -17,8 +19,8 @@ public class AucServerApplication implements CommandLineRunner {
 	@Autowired
 	private OffersRepositoryJpa offersRepo;
 
-//	@Autowired
-//	private BidsRepositoryJpa bidsRepo;
+	@Autowired
+	private BidsRepositoryJpa bidsRepo;
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext applicationContext = SpringApplication.run(AucServerApplication.class, args);
@@ -31,6 +33,7 @@ public class AucServerApplication implements CommandLineRunner {
 		System.out.println("Running CommandLine Startup");
 
 		this.createInitialOffers();
+		this.createInitialBids();
 	}
 
 	public void createInitialOffers() {
@@ -41,24 +44,19 @@ public class AucServerApplication implements CommandLineRunner {
 		System.out.println("Configuring some initial Offer data");;
 
 		for (int i = 0; i < 9; i++) {
-			Offer offer = offersRepo.save(Offer.createSampleOffer(0));
+			Offer offer = offersRepo.save(Offer.createSampleOffer());
 		}
 	}
-//
-//	public void createInitialBids() {
-//		List<Bid> bids = this.bidsRepo.findAll();
-//		List<Offer> offers = this.offersRepo.findAll();
-//
-//		if (bids.size() > 0) return;
-//
-//		System.out.println("Configuring some initial Bid data");
-//
-//		for (int i = 0; i < 9; i++) {
-//			Bid bid = Bid.createSampleBid();
-//			Offer offer = offers.get(i);
-//
-//			bid.setOffer(offer);
-//			bidsRepo.save(bid);
-//		}
-//	}
+
+	public void createInitialBids() {
+		List<Bid> bids = this.bidsRepo.findAll();
+
+		if (bids.size() > 0) return;
+
+		System.out.println("Configuring some initial Bids data");;
+
+		for (int i = 0; i < 9; i++) {
+			Bid bid = bidsRepo.save(Bid.createSampleBid());
+		}
+	}
 }
