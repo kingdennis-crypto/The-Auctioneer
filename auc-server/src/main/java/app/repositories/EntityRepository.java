@@ -32,4 +32,12 @@ public interface EntityRepository<E extends Identifiable> {
      * @return an instance of the deleted offer
      */
     E deleteById(long id);
+
+    /**
+     *
+     * @param jpqlName
+     * @param params
+     * @return
+     */
+    List<E> findByQuery(String jpqlName, Object ... params);
 }

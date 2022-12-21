@@ -17,6 +17,7 @@ public abstract class AbstractEntityRepositoryJPA<E extends Identifiable> implem
         this.entityClass = entityClass;
     }
 
+    @Override
     public List<E> findByQuery(String jpqlName, Object... params) {
         TypedQuery<E> query = entityManager.createNamedQuery(jpqlName, entityClass);
 

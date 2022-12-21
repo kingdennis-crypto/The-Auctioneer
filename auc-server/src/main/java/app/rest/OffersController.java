@@ -51,6 +51,37 @@ public class OffersController {
         return offer;
     }
 
+    @GetMapping("")
+    public List<Offer> getOffers(@RequestParam Optional<String> title, @RequestParam Optional<String> status, @RequestParam Optional<Double> minBidValue) {
+        if (title.isEmpty() && status.isEmpty() && minBidValue.isEmpty()) return offersRepo.findAll();
+
+        List<Offer> offers = new ArrayList<>();
+
+        title.ifPresent(s -> offers.addAll(offersRepo.findByQuery("Offer_find_by_title", s)));
+
+        if (status.isPresent()) {
+            if (Stream.of(Offer.STATUS.values()).noneMatch(s -> s.name().equals(status.get()))) {
+                throw new BadRequest(String.format("Status=%s is not a valid status", status.get()));
+            }
+
+            Offer.STATUS newStatus = Offer.STATUS.valueOf(status.get());
+
+            if (minBidValue.isPresent()) {
+                offers.addAll(offersRepo.findByQuery("Offer_find_by_status_and_minBidValue", newStatus, minBidValue.get()));
+
+                return offers;
+            }
+
+            offers.addAll(offersRepo.findByQuery("Offer_find_by_status", newStatus));
+        }
+
+        if (title.isEmpty() && status.isEmpty()) {
+            throw new BadRequest(String.format("Cannot handle you combination of request parameters of parameters title=, status= and minBidValue=%.2f", minBidValue.get()));
+        }
+
+        return offers;
+    }
+
     @PostMapping("")
     public Offer create(@RequestBody Offer offer) {
         if (offer.getId() == 0) offer.setId(new Random().nextInt(40000, 50000));

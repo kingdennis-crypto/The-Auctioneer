@@ -13,7 +13,7 @@ import java.util.List;
 @Primary
 @Repository
 @Transactional
-public class OffersRepositoryJpa implements OffersRepository{
+public class OffersRepositoryJpa implements EntityRepository<Offer>{
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -70,5 +70,10 @@ public class OffersRepositoryJpa implements OffersRepository{
         entityManager.remove(offer);
 
         return offer;
+    }
+
+    @Override
+    public List<Offer> findByQuery(String jpqlName, Object... params) {
+        return null;
     }
 }

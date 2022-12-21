@@ -1,6 +1,7 @@
 package app.models;
 
 //import app.repositories.Identifiable;
+import app.repositories.Identifiable;
 import app.views.CustomOfferView;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -9,8 +10,17 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.*;
 
+@NamedQueries({
+        @NamedQuery(name = "Offer_find_by_status",
+                query = "SELECT o FROM Offer o WHERE o.status=?1"),
+        @NamedQuery(name = "Offer_find_by_title",
+                query = "SELECT o FROM Offer o WHERE o.title=?1"),
+        @NamedQuery(name = "Offer_find_by_status_and_minBidValue",
+                query = "SELECT o FROM Offer o INNER JOIN Bid b ON b.offer = o WHERE o.status=?1 AND b.bidValue > ?2")
+})
+
 @Entity
-public class Offer {
+public class Offer implements Identifiable {
     private static final String[] TITLES = {"toolset", "lamp", "lamp", "cabinet", "lamp", "clock", "bicycle", "coat"};
     private static final String[] DESCRIPTIONS = {"A characteristic, original toolset", "A modern comfort lamp", "A small comfortable lamp", "An antique cozy cabinet", "An antique cozy lamp", "A characteristic, cozy clock", "A small, robust bicycle", "A characteristic, original coat"};
 

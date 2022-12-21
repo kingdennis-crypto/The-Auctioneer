@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class BidsRepositoryJpa {
+public class BidsRepositoryJpa implements EntityRepository<Bid>{
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -46,11 +46,11 @@ public class BidsRepositoryJpa {
     /**
      * Method to save an offer
      *
-     * @param entity an instance of Offer to save
+     * @param bid an instance of Offer to save
      * @return the saved offer
      */
-    public Bid save(Bid entity) {
-        return entityManager.merge(entity);
+    public Bid save(Bid bid) {
+        return entityManager.merge(bid);
     }
 
     /**
@@ -63,5 +63,10 @@ public class BidsRepositoryJpa {
         Bid bid = findById(id);
         entityManager.remove(bid);
         return bid;
+    }
+
+    @Override
+    public List<Bid> findByQuery(String jpqlName, Object... params) {
+        return null;
     }
 }
