@@ -13,13 +13,14 @@ import java.util.List;
 @Primary
 @Repository
 @Transactional
-public class OffersRepositoryJpa implements EntityRepository<Offer>{
+//public class OffersRepositoryJpa implements EntityRepository<Offer>{
+public class OffersRepositoryJpa extends AbstractEntityRepositoryJPA<Offer> {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     public OffersRepositoryJpa() {
-        super();
+        super(Offer.class);
     }
 
     /**
@@ -70,10 +71,5 @@ public class OffersRepositoryJpa implements EntityRepository<Offer>{
         entityManager.remove(offer);
 
         return offer;
-    }
-
-    @Override
-    public List<Offer> findByQuery(String jpqlName, Object... params) {
-        return null;
     }
 }

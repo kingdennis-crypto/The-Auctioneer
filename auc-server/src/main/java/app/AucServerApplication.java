@@ -50,6 +50,7 @@ public class AucServerApplication implements CommandLineRunner {
 
 	public void createInitialBids() {
 		List<Bid> bids = this.bidsRepo.findAll();
+		List<Offer> offers =  this.offersRepo.findAll();
 
 		if (bids.size() > 0) return;
 
@@ -57,6 +58,7 @@ public class AucServerApplication implements CommandLineRunner {
 
 		for (int i = 0; i < 9; i++) {
 			Bid bid = bidsRepo.save(Bid.createSampleBid());
+			bid.setOffer(offers.get(i));
 		}
 	}
 }

@@ -3,6 +3,7 @@ package app.models;
 //import app.repositories.Identifiable;
 import app.repositories.Identifiable;
 import app.views.CustomOfferView;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -30,20 +31,21 @@ public class Offer implements Identifiable {
 
     @JsonView(CustomOfferView.Summary.class)
     @Id
+    @GeneratedValue
     private long id;
+
     @JsonView(CustomOfferView.Summary.class)
     private String title;
     @JsonView(CustomOfferView.Summary.class)
     @Enumerated(EnumType.ORDINAL)
     private STATUS status;
-    @JsonView(CustomOfferView.Summary.class)
+
     private String description;
-    @JsonView(CustomOfferView.Summary.class)
     private LocalDate sellDate;
-    @JsonView(CustomOfferView.Summary.class)
     private int valueHighestBid;
 
     @OneToMany(mappedBy = "offer")
+    @JsonBackReference
 //    @JsonSerialize(using = CustomOfferView.ShallowSerializer.class)
     private List<Bid> bids;
 
@@ -152,20 +154,27 @@ public class Offer implements Identifiable {
         this.valueHighestBid = valueHighestBid;
     }
 
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
+
     /**
      * Associates the given bid with this offer, if not yet associated
      * and only if the value of the bid exceeds currently the highest bid on this offer
      * @param bid
-     * @return Wheter a new association has been added
+     * @return Whether a new association has been added
      */
     public boolean associateBid(Bid bid) {
-        if (bid != null && bid.getOffer() == null) {
-            bids.add(bid);
-
-            setValueHighestBid((int) bid.getBidValue());
-
-            return bid.associateOffer(this);
+        if (bid.getOffer() == null) {
+            bid.associateOffer(this);
         }
+
+        setValueHighestBid((int) bid.getBidValue());
+        bids.add(bid);
 
         return false;
     }
@@ -177,7 +186,7 @@ public class Offer implements Identifiable {
      */
     public boolean dissocateBid(Bid bid) {
         if (bid != null && bid.getOffer() != null) {
-            return this.bids.remove(bid) && bid.associateOffer(null);
+            return bids.remove(bid) && bid.associateOffer(null);
         }
 
         return false;

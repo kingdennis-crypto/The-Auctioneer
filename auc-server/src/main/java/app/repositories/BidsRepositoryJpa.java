@@ -11,13 +11,14 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class BidsRepositoryJpa implements EntityRepository<Bid>{
+//public class BidsRepositoryJpa implements EntityRepository<Bid>{
+public class BidsRepositoryJpa extends AbstractEntityRepositoryJPA<Bid> {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     public BidsRepositoryJpa() {
-        super();
+        super(Bid.class);
     }
 
     /**
@@ -63,10 +64,5 @@ public class BidsRepositoryJpa implements EntityRepository<Bid>{
         Bid bid = findById(id);
         entityManager.remove(bid);
         return bid;
-    }
-
-    @Override
-    public List<Bid> findByQuery(String jpqlName, Object... params) {
-        return null;
     }
 }

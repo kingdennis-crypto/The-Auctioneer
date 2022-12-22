@@ -3,6 +3,7 @@ package app.models;
 import app.repositories.Identifiable;
 import app.views.CustomOfferView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
@@ -18,15 +19,21 @@ public class Bid implements Identifiable {
     @JsonView(CustomOfferView.Shallow.class)
     private double bidValue;
 
-    @JsonIgnore // Added this because I got errors with the GET request
     @ManyToOne()
-    @JsonView(CustomOfferView.Shallow.class)
+//    @JsonManagedReference
+//    @JsonView(CustomOfferView.Shallow.class)
     private Offer offer;
 
     protected Bid() {}
 
     public Bid(double value) {
         this.bidValue = value;
+        this.offer = null;
+    }
+
+    public Bid(double value, Offer offer) {
+        this.bidValue = value;
+        this.offer = offer;
     }
 
     @Override
@@ -72,14 +79,27 @@ public class Bid implements Identifiable {
     public boolean associateOffer(Offer offer) {
         if (offer != null && this.getOffer() == null) {
             setOffer(offer);
+            offer.associateBid(this);
             return true;
-
         } else if (offer == null && this.offer != null) {
             setOffer(null);
             return true;
         }
 
         return false;
+
+//        if (offer != null && this.getOffer() == null) {
+//            setOffer(offer);
+//            offer.associateBid(this);
+//            return true;
+//
+//        } else if (offer == null && this.offer != null) {
+//            setOffer(null);
+//            this.offer.dissocateBid(this);
+//            return true;
+//        }
+//
+//        return false;
     }
 }
 

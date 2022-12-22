@@ -6,6 +6,7 @@ import app.exceptions.PreConditionFailed;
 import app.models.Bid;
 import app.models.Offer;
 import app.repositories.BidsRepositoryJpa;
+import app.repositories.EntityRepository;
 import app.repositories.OffersRepository;
 import app.repositories.OffersRepositoryJpa;
 import app.views.CustomOfferView;
@@ -29,16 +30,21 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/offers")
 public class OffersController {
+//    @Autowired
+//    private OffersRepositoryJpa offersRepo;
     @Autowired
-    private OffersRepositoryJpa offersRepo;
+    private EntityRepository<Offer> offersRepo;
+
+//    @Autowired
+//    private BidsRepositoryJpa bidsRepository;
 
     @Autowired
-    private BidsRepositoryJpa bidsRepository;
+    private EntityRepository<Bid> bidsRepository;
 
-    @GetMapping("")
-    public List<Offer> getAll() {
-        return offersRepo.findAll();
-    }
+//    @GetMapping("")
+//    public List<Offer> getAll() {
+//        return offersRepo.findAll();
+//    }
 
     @GetMapping(path = "{id}", produces = "application/json")
     public Offer getOffer(@PathVariable long id) {
@@ -131,15 +137,13 @@ public class OffersController {
         Offer offer = offersRepo.findById(id);
 
         if (offer == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Offer not found");
+            throw new NotFoundException("Offer not found");
         }
 
-        System.out.println(offer.getValueHighestBid());
+        boolean lowerValue = offer.getValueHighestBid() >= bid.getBidValue();
+        boolean forSale = offer.getStatus() == Offer.STATUS.FOR_SALE;
 
-        boolean higherValue = offer.getValueHighestBid() > bid.getBidValue();
-        boolean notForSale = offer.getStatus() == Offer.STATUS.FOR_SALE;
-
-        if (higherValue || notForSale) {
+        if (lowerValue || forSale) {
             throw new PreConditionFailed(String.format("Bid with value=%f does not beat latest bid on offerId=%d", bid.getBidValue(), offer.getId()));
         }
 
