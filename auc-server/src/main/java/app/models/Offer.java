@@ -44,9 +44,9 @@ public class Offer implements Identifiable {
     private LocalDate sellDate;
     private int valueHighestBid;
 
-    @OneToMany(mappedBy = "offer")
-    @JsonBackReference
-//    @JsonSerialize(using = CustomOfferView.ShallowSerializer.class)
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
+//    @JsonBackReference
+    @JsonSerialize(using = CustomOfferView.ShallowSerializer.class)
     private List<Bid> bids;
 
     public Offer(int id) {
@@ -169,12 +169,18 @@ public class Offer implements Identifiable {
      * @return Whether a new association has been added
      */
     public boolean associateBid(Bid bid) {
-        if (bid.getOffer() == null) {
-            bid.associateOffer(this);
-        }
+        // FIXME rewrite the if statement as the bid
 
-        setValueHighestBid((int) bid.getBidValue());
-        bids.add(bid);
+        if (bid != null && bid.getOffer() == null) {
+//            if (bid.getOffer() == null) {
+//                bid.associateOffer(this);
+//            }
+
+            setValueHighestBid((int) bid.getBidValue());
+            bids.add(bid);
+
+            return true;
+        }
 
         return false;
     }

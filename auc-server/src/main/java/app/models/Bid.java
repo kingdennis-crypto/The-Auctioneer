@@ -12,6 +12,7 @@ import java.util.Random;
 @Entity
 public class Bid implements Identifiable {
     @Id
+    @SequenceGenerator(name="Bid_ids", initialValue = 10_001)
     @GeneratedValue
     @JsonView(CustomOfferView.Shallow.class)
     private long id;
@@ -19,9 +20,9 @@ public class Bid implements Identifiable {
     @JsonView(CustomOfferView.Shallow.class)
     private double bidValue;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
 //    @JsonManagedReference
-//    @JsonView(CustomOfferView.Shallow.class)
+    @JsonView(CustomOfferView.ShallowSerializer.class)
     private Offer offer;
 
     protected Bid() {}

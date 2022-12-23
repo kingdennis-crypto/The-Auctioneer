@@ -24,7 +24,6 @@ public class AucServerApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext applicationContext = SpringApplication.run(AucServerApplication.class, args);
-//		OffersRepositoryMockImpl offersRepositoryMock = applicationContext.getBean(OffersRepositoryMockImpl.class);
 	}
 
 	@Transactional
@@ -58,7 +57,7 @@ public class AucServerApplication implements CommandLineRunner {
 
 		for (int i = 0; i < 9; i++) {
 			Bid bid = bidsRepo.save(Bid.createSampleBid());
-			bid.setOffer(offers.get(i));
+			bid.associateOffer(offers.get(i));
 		}
 	}
 }
