@@ -1,43 +1,36 @@
-package app.repositories;
+package app.repositories.interfaces;
 
 import app.models.Offer;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface EntityRepository<E extends Identifiable> {
-
+public interface OffersRepository {
     /**
      * Methhod to retrieve all offers
      * @return a list of offers
      */
-    List<E> findAll();
+    List<Offer> findAll();
 
     /**
      * Method to find an Offer by the id
      * @param id the offer to find
      * @return the instance of the offer
      */
-    E findById(long id);
+    Offer findById(long id);
 
     /**
      * Method to save an offer
-     * @param entity an instance of Offer to save
+     * @param offer an instance of Offer to save
      * @return the saved offer
      */
-    E save(E entity);
+    Offer save(Offer offer);
 
     /**
      * Delete the offer from the repository
      * @param id the offer to be deleted
      * @return an instance of the deleted offer
      */
-    E deleteById(long id);
-
-    /**
-     *
-     * @param jpqlName
-     * @param params
-     * @return
-     */
-    List<E> findByQuery(String jpqlName, Object ... params);
+    Offer deleteById(long id);
 }

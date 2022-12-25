@@ -1,5 +1,8 @@
 package app.repositories;
 
+import app.repositories.interfaces.EntityRepository;
+import app.repositories.interfaces.Identifiable;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

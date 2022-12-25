@@ -1,7 +1,7 @@
 package app.models;
 
-//import app.repositories.Identifiable;
-import app.views.CustomOfferView;
+//import app.repositories.interfaces.Identifiable;
+import app.views.Views;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

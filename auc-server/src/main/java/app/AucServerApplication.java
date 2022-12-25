@@ -56,8 +56,8 @@ public class AucServerApplication implements CommandLineRunner {
 		System.out.println("Configuring some initial Bids data");;
 
 		for (int i = 0; i < 9; i++) {
-			Bid bid = bidsRepo.save(Bid.createSampleBid());
-			bid.associateOffer(offers.get(i));
+			Bid bid = Bid.createSampleBid();
+			offers.get(i).associateBid(bid);
 		}
 	}
 }

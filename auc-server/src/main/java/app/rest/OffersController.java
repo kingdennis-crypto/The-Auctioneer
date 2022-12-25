@@ -5,19 +5,13 @@ import app.exceptions.NotFoundException;
 import app.exceptions.PreConditionFailed;
 import app.models.Bid;
 import app.models.Offer;
-import app.repositories.BidsRepositoryJpa;
-import app.repositories.EntityRepository;
-import app.repositories.OffersRepository;
-import app.repositories.OffersRepositoryJpa;
-import app.views.CustomOfferView;
+import app.models.enums.Status;
+import app.repositories.interfaces.EntityRepository;
+import app.views.Views;
 import com.fasterxml.jackson.annotation.JsonView;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.metadata.HsqlTableMetaDataProvider;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -66,11 +60,11 @@ public class OffersController {
         title.ifPresent(s -> offers.addAll(offersRepo.findByQuery("Offer_find_by_title", s)));
 
         if (status.isPresent()) {
-            if (Stream.of(Offer.STATUS.values()).noneMatch(s -> s.name().equals(status.get()))) {
+            if (Stream.of(Status.values()).noneMatch(s -> s.name().equals(status.get()))) {
                 throw new BadRequest(String.format("Status=%s is not a valid status", status.get()));
             }
 
-            Offer.STATUS newStatus = Offer.STATUS.valueOf(status.get());
+            Status newStatus = Status.valueOf(status.get());
 
             if (minBidValue.isPresent()) {
                 offers.addAll(offersRepo.findByQuery("Offer_find_by_status_and_minBidValue", newStatus, minBidValue.get()));
@@ -127,12 +121,40 @@ public class OffersController {
     }
 
     @GetMapping("/summary")
-    @JsonView(CustomOfferView.Summary.class)
+    @JsonView(Views.Summary.class)
     public List<Offer> getAllScootersSummary() {
         return offersRepo.findAll();
     }
 
-    @PostMapping(value = "{id}/bids", produces = "application/json")
+    @GetMapping("{id}/bids")
+    public List<Bid> getBidsOfOffer(@PathVariable long id) {
+        Offer offer = offersRepo.findById(id);
+
+        if (offer == null) {
+            throw new NotFoundException("Offer not found");
+        }
+
+        return offer.getBids();
+    }
+
+    @DeleteMapping("{id}/bids/{bidId}")
+    public ResponseEntity<Bid> deleteBidOfOffer(@PathVariable long id, @PathVariable long bidId) {
+        Offer offer = offersRepo.findById(id);
+        Bid bid = bidsRepository.findById(bidId);
+
+        if (offer == null) {
+            throw new NotFoundException("Offer not found");
+        }
+
+        if (bid == null) {
+            throw new NotFoundException("Bid not found");
+        }
+
+        bidsRepository.deleteById(bidId);
+        return ResponseEntity.ok(bid);
+    }
+
+    @PostMapping(path = "{id}/bids", produces = "application/json")
     public ResponseEntity<Bid> addBidToOffer(@PathVariable long id, @RequestBody Bid bid) {
         Offer offer = offersRepo.findById(id);
 
@@ -141,22 +163,22 @@ public class OffersController {
         }
 
         boolean lowerValue = offer.getValueHighestBid() >= bid.getBidValue();
-        boolean forSale = offer.getStatus() == Offer.STATUS.FOR_SALE;
+        boolean forSale = offer.getStatus() == Status.FOR_SALE;
 
         if (lowerValue || forSale) {
             throw new PreConditionFailed(String.format("Bid with value=%f does not beat latest bid on offerId=%d", bid.getBidValue(), offer.getId()));
         }
 
-        bid.associateOffer(offer);
+        bid = bidsRepository.save(bid);
 
-        Bid savedBid = bidsRepository.save(bid);
+        offer.associateBid(bid);
         offersRepo.save(offer);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(savedBid.getId()).toUri();
+                .buildAndExpand(bid.getId()).toUri();
 
-        return ResponseEntity.created(location).body(savedBid);
+        return ResponseEntity.created(location).body(bid);
     }
 }

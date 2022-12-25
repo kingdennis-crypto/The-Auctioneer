@@ -62,6 +62,9 @@ public class BidsRepositoryJpa extends AbstractEntityRepositoryJPA<Bid> {
      */
     public Bid deleteById(long id) {
         Bid bid = findById(id);
+
+        if (bid == null) return null;
+
         entityManager.remove(bid);
         return bid;
     }

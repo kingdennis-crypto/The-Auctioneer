@@ -1,10 +1,10 @@
 package app.models;
 
-import app.repositories.Identifiable;
-import app.views.CustomOfferView;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import app.repositories.interfaces.Identifiable;
+import app.views.Views;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import java.util.Random;
@@ -12,17 +12,18 @@ import java.util.Random;
 @Entity
 public class Bid implements Identifiable {
     @Id
-    @SequenceGenerator(name="Bid_ids", initialValue = 10_001)
-    @GeneratedValue
-    @JsonView(CustomOfferView.Shallow.class)
+    @SequenceGenerator(name="Bid_Seq", initialValue = 10_000)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Bid_Seq")
+    @JsonView(Views.Public.class)
     private long id;
 
-    @JsonView(CustomOfferView.Shallow.class)
+    @JsonView(Views.Public.class)
     private double bidValue;
 
     @ManyToOne(fetch = FetchType.LAZY)
 //    @JsonManagedReference
-    @JsonView(CustomOfferView.ShallowSerializer.class)
+//    @JsonView(Views.ShallowSerializer.class)
+    @JsonSerialize(using = Views.ShallowSerializer.class)
     private Offer offer;
 
     protected Bid() {}
@@ -82,25 +83,17 @@ public class Bid implements Identifiable {
             setOffer(offer);
             offer.associateBid(this);
             return true;
-        } else if (offer == null && this.offer != null) {
-            setOffer(null);
-            return true;
         }
 
         return false;
+    }
 
-//        if (offer != null && this.getOffer() == null) {
-//            setOffer(offer);
-//            offer.associateBid(this);
-//            return true;
-//
-//        } else if (offer == null && this.offer != null) {
-//            setOffer(null);
-//            this.offer.dissocateBid(this);
-//            return true;
-//        }
-//
-//        return false;
+    public boolean dissociateOffer(Offer offer) {
+        if (offer != null && getOffer() != null) {
+            return offer.dissociateBid(this);
+        }
+
+        return false;
     }
 }
 

@@ -12,9 +12,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
 
-public class CustomOfferView {
-    public static class Shallow {}
-    public static class Summary extends Shallow {}
+public class Views {
+    public static class Public {}
+    public static class Internal extends Public {}
+    public static class Summary extends Public {}
 
     public static class ShallowSerializer extends JsonSerializer<Object> {
         @Override
@@ -28,7 +29,7 @@ public class CustomOfferView {
 
             mapper.registerModule(new JavaTimeModule()).configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,false);
 
-            mapper.setConfig(mapper.getSerializationConfig().withView(Shallow.class));
+            mapper.setConfig(mapper.getSerializationConfig().withView(Public.class));
 
             jsonGenerator.setCodec(mapper);
             jsonGenerator.writeObject(object);

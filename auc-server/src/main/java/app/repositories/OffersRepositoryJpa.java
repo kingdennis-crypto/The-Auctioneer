@@ -67,12 +67,11 @@ public class OffersRepositoryJpa extends AbstractEntityRepositoryJPA<Offer> {
      */
     @Override
     public Offer deleteById(long id) {
-        List<Offer> offers = findAll();
+        Offer offer = findById(id);
 
-        Offer searchedOffer = findById(id);
+        if (offer == null) return null;
 
-        offers.removeIf(offer -> offer.equals(searchedOffer));
-
-        return searchedOffer;
+        entityManager.remove(offer);
+        return offer;
     }
 }
