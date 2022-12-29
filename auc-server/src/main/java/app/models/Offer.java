@@ -17,7 +17,7 @@ import java.util.*;
         @NamedQuery(name = "Offer_find_by_title",
                 query = "SELECT o FROM Offer o WHERE o.title=?1"),
         @NamedQuery(name = "Offer_find_by_status_and_minBidValue",
-                query = "SELECT o FROM Offer o INNER JOIN Bid b ON b.offer = o WHERE o.status=?1 AND b.bidValue > ?2")
+                query = "SELECT o FROM Offer o WHERE o.status=?1 AND o.valueHighestBid > ?2")
 })
 
 @Entity
@@ -28,6 +28,7 @@ public class Offer implements Identifiable {
     @Id
     @SequenceGenerator(name = "Offer_Seq", initialValue = 30_000)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Offer_Seq")
+    @JsonView(Views.Public.class)
     private long id;
 
     @JsonView(Views.Public.class)
@@ -68,10 +69,11 @@ public class Offer implements Identifiable {
     }
 
     public static Offer createSampleOffer() {
+        Random random = new Random();
         int valueHighestBid = (int) Math.floor(Math.random() * 100);
 
         String title = TITLES[(int) Math.floor(Math.random() * TITLES.length)];
-        Status status = Status.NEW;
+        Status status = Status.values()[random.nextInt(Status.values().length)];
         String description = DESCRIPTIONS[(int) Math.floor(Math.random() * DESCRIPTIONS.length)];
 
         return new Offer(title, status, description, new Date(), valueHighestBid);

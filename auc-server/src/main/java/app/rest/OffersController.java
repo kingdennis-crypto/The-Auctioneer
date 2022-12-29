@@ -52,7 +52,7 @@ public class OffersController {
     }
 
     @GetMapping("")
-    public List<Offer> getOffers(@RequestParam Optional<String> title, @RequestParam Optional<String> status, @RequestParam Optional<Double> minBidValue) {
+    public List<Offer> getOffers(@RequestParam Optional<String> title, @RequestParam Optional<String> status, @RequestParam Optional<Integer> minBidValue) {
         if (title.isEmpty() && status.isEmpty() && minBidValue.isEmpty()) return offersRepo.findAll();
 
         List<Offer> offers = new ArrayList<>();
@@ -60,6 +60,8 @@ public class OffersController {
         title.ifPresent(s -> offers.addAll(offersRepo.findByQuery("Offer_find_by_title", s)));
 
         if (status.isPresent()) {
+            offers.clear();
+
             if (Stream.of(Status.values()).noneMatch(s -> s.name().equals(status.get()))) {
                 throw new BadRequest(String.format("Status=%s is not a valid status", status.get()));
             }
@@ -76,7 +78,7 @@ public class OffersController {
         }
 
         if (title.isEmpty() && status.isEmpty()) {
-            throw new BadRequest(String.format("Cannot handle you combination of request parameters of parameters title=, status= and minBidValue=%.2f", minBidValue.get()));
+            throw new BadRequest(String.format("Cannot handle you combination of request parameters of parameters title=, status= and minBidValue=%d", minBidValue.get()));
         }
 
         return offers;
