@@ -34,7 +34,7 @@ public class AuthenticationController {
             throw new NotAcceptableException("HALLO");
         }
 
-        User user = new User(emailArray[0], email, password, role);
+        User user = new User(0, emailArray[0], email, password, role);
         JWToken jwToken = new JWToken(user.getName(), user.getId(), user.getRole());
 
         String issuer = environment.getProperty("jwt.issuer");

@@ -28,7 +28,8 @@ public class User {
 
     protected User() {}
 
-    public User (String name, String email, String hashedPassword, String role) {
+    public User (long id, String name, String email, String hashedPassword, String role) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.hashedPassword = hashedPassword;

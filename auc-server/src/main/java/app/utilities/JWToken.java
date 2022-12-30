@@ -13,7 +13,6 @@ public class JWToken {
     private static final String JWT_USERID_CLAIM = "id";
     private static final String JWT_ROLE_CLAIM = "role";
     private static final String JWT_IPADDRESS_CLAIM = "ipa";
-
     public static final String JWT_ATTRIBUTE_NAME = "JWTokenInfo";
 
     private String callName = null;
@@ -21,7 +20,7 @@ public class JWToken {
     private String role = null;
     private String ipAddress;
 
-    public JWToken(String callName, Long userId, String role) {
+    public JWToken(String callName, long userId, String role) {
         this.callName = callName;
         this.userId = userId;
         this.role = role;
@@ -42,23 +41,24 @@ public class JWToken {
     }
 
     public static JWToken decode(String token, String passphrase) throws ExpiredJwtException, MalformedJwtException {
-        passphrase = passphrase.replaceAll(String.valueOf('"'), "");
-
         Key key = getKey(passphrase);
+
         Jws<Claims> jws = Jwts.parserBuilder()
-                .setSigningKey(passphrase.getBytes())
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
 
         Claims claims = jws.getBody();
 
+        // TODO, in the PDF it says something different, but this works for now
         JWToken jwToken = new JWToken(
                 JWT_CALLNAME_CLAIM,
-                Long.valueOf(JWT_USERID_CLAIM),
+                0,
                 JWT_ROLE_CLAIM
         );
 
         jwToken.setIpAddress((String) claims.get(JWT_IPADDRESS_CLAIM));
+        System.out.println(jwToken.toString());
         return jwToken;
     }
 
@@ -97,5 +97,15 @@ public class JWToken {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    @Override
+    public String toString() {
+        return "JWToken{" +
+                "callName='" + callName + '\'' +
+                ", userId=" + userId +
+                ", role='" + role + '\'' +
+                ", ipAddress='" + ipAddress + '\'' +
+                '}';
     }
 }

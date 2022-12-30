@@ -44,11 +44,14 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
         try {
             jwToken = JWToken.decode(encryptedToken, this.apiConfig.getPassphrase());
+            System.out.println("NEE 2");
         } catch (RuntimeException e) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, String.format("%s. You need to login first.", e.getMessage()));
+            System.out.println("WEL");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, String.format("%s You need to login first.", e.getMessage()));
             return;
         }
 
+        // Pass-on the token info as an attribute for the request
         request.setAttribute(JWToken.JWT_ATTRIBUTE_NAME, jwToken);
         filterChain.doFilter(request, response);
     }
