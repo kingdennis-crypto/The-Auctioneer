@@ -179,7 +179,7 @@ public class Offer implements Identifiable {
      */
     public boolean dissociateBid(Bid bid) {
         if (bid != null && bid.getOffer() != null) {
-            return bids.remove(bid) && bid.associateOffer(null);
+            return bids.remove(bid) && bid.dissociateOffer(this);
         }
 
         return false;
