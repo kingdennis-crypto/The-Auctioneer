@@ -11,8 +11,13 @@
         <p>Don't be vague, ask for the Auctioneer.</p>
       </div>
       <div class="w-1/3 align-middle items-end`">
-        <router-link to="/sign-up" class="mr-6 text-sm font-medium text-gray-500 dark:text-white hover:underline">Sign up</router-link>
-        <router-link to="/sign-in" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Login</router-link>
+        <div v-if="isLoggedIn">
+          <router-link to="/sign-out" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Log out</router-link>
+        </div>
+        <div v-else>
+          <router-link to="/sign-up" class="mr-6 text-sm font-medium text-gray-500 dark:text-white hover:underline">Sign up</router-link>
+          <router-link to="/sign-in" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login</router-link>
+        </div>
       </div>
     </div>
   </nav>
@@ -41,16 +46,22 @@
                  class="hidden z-10 w-44 font-normal bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
               <ul class="py-1 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
                 <li>
-                  <router-link to="/offers/overview31" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Offers overview</router-link>
+                  <router-link to="/offers/overview31" class="block py-2 px-4 hover:bg-gray-100">Offers overview</router-link>
                 </li>
                 <li>
-                  <router-link to="/offers/overview32" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Offers detail (comp)</router-link>
+                  <router-link to="/offers/overview32" class="block py-2 px-4 hover:bg-gray-100">Offers detail (comp)</router-link>
                 </li>
                 <li>
-                  <router-link to="/offers/overview33" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Offers edit (router)</router-link>
                 </li>
                 <li>
-                  <router-link to="/offers/overview34" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Offers edit (managed)</router-link>
+                  <router-link to="/offers/overview34" class="block py-2 px-4 hover:bg-gray-100">Offers edit (managed)</router-link>
+                </li>
+                <hr />
+                <li>
+                  <router-link to="/offers/overview37" class="block py-2 px-4 hover:bg-gray-100">37</router-link>
+                </li>
+                <li>
+                  <router-link to="/offers/overview37cached" class="block py-2 px-4 hover:bg-gray-100">37 cached</router-link>
                 </li>
               </ul>
             </div>
@@ -59,9 +70,7 @@
             <a href="#" class="text-gray-900 dark:text-white hover:underline">My account</a>
           </li>
         </ul>
-        <ul>
-          <p>Welcome {{ getEmail }} !</p>
-        </ul>
+        <p>Welcome {{ getEmail }} !</p>
         <ul>
           <div class="mr-2">
             <p>Today is {{ getDate() }}</p>
@@ -91,8 +100,10 @@ export default {
   },
   computed: {
     getEmail() {
-      // return "HALLO"
       return this.sessionSbService.getUserEmail();
+    },
+    isLoggedIn() {
+      return this.sessionSbService.isLoggedIn();
     }
   }
 }

@@ -19,8 +19,34 @@ export class FetchInterceptor {
             FetchInterceptor.theInstance.session.getCurrentToken());
     }
 
-    request(url, options) {}
-    requestError(error) {}
-    response(response) {}
-    responseError(error) {}
+    request(url, options) {
+        console.log("FETCHING");
+        console.log(FetchInterceptor.theInstance.session.getCurrentToken());
+        let token = FetchInterceptor.theInstance.session.getCurrentToken();
+        console.log(token)
+
+        if (token === null) {
+            return [url, options];
+        } else if (options === null) {
+            return [url, { headers: { Authorization: token }}]
+        } else {
+            let newOptions = { ...options };
+
+            newOptions.headers = { Authorization: `Bearer ${token}` };
+
+            return [url, newOptions];
+        }
+    }
+
+    requestError(error) {
+        return error;
+    }
+
+    response(response) {
+        return response;
+    }
+
+    responseError(error) {
+        return error;
+    }
 }

@@ -19,6 +19,7 @@ import Detail37cached from "@/components/offers/37/Detail37cached";
 
 // Miscellaneous
 import UnkownRoute from '@/components/UnknownRoute.vue';
+import SignIn from '@/components/SignIn.vue';
 
 const routes = [
   { path: '/', component: WelcomeVue },
@@ -36,9 +37,11 @@ const routes = [
     ]},
   { path: '/offers/overview37cached', component: Overview37cached, children: [
       { path: ':id', component: Detail37cached }
-    ]},
+  ]
+  },
+  { path: '/sign-in', name: 'SignIn', component: SignIn },
+  { path: '/sign-out', name: 'SignOut', redirect: '/sign-in?signOut=true' },
   { path: '/:pathMatch(.*)', component: UnkownRoute },
-
 ];
 
 export const router = createRouter({

@@ -1,33 +1,42 @@
 <template>
   <NavbarSb />
   <router-view/>
-  <!--  <Footer />-->
 </template>
 
 <script>
-// import AuctionNavbar from './components/Navbar.vue';
-import NavbarSb from "@/components/NavbarSb";
 import Footer from './components/Footer.vue';
 import { OffersAdaptor } from "@/services/offers-adaptor";
-import {reactive, shallowReactive} from "vue";
-import {CachedOffersAdaptor} from "@/services/cached-offers-adaptor";
-import {Offer} from "@/models/offer";
-import {SessionSbService} from "@/services/session-sb-service";
+import { reactive, shallowReactive } from "vue";
+import { CachedOffersAdaptor } from "@/services/cached-offers-adaptor";
+import { Offer } from "@/models/offer";
+import { SessionSbService } from "@/services/session-sb-service";
+import NavbarSb from './components/NavbarSb.vue';
+import { FetchInterceptor } from './services/fetch-interceptor';
 
 export default {
   name: 'App',
   components: {
-    NavbarSb,
-    // AuctionNavbar,
-    // Footer,
+    NavbarSb
   },
   provide() {
 
+    this.theSessionService = shallowReactive(
+      new SessionSbService("http://localhost:8083/authentication", "IDK"));
+
+    this.theFetchInterceptor = 
+      new FetchInterceptor(this.theSessionService, this.$router);
+
     return {
       offersService: new OffersAdaptor("http://localhost:8083/offers"),
+      usersService: new OffersAdaptor("http://localhost:8083/users"),
+      
       cachedOffersService: reactive(new CachedOffersAdaptor("http://localhost:8083/offers", Offer.copyConstructor())),
       sessionSbService: shallowReactive(new SessionSbService("http://localhost:8083/authentication", "token"))
     }
+  },
+  unmounted() {
+    console.log("App.unmounted() has been called.");
+    this.theFetchInterceptor.unregister();
   }
 }
 </script>
@@ -36,7 +45,6 @@ export default {
 body {
   padding: 0;
   overflow-x: hidden;
-  min-height: 130vh;
   position: relative;
 }
 

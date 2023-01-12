@@ -31,7 +31,7 @@ public class AuthenticationController {
         String[] emailArray = email.split("@");
 
         if (!emailArray[0].equals(password)) {
-            throw new NotAcceptableException("HALLO");
+            throw new NotAcceptableException("Wrong credentials");
         }
 
         User user = new User(0, emailArray[0], email, password, role);

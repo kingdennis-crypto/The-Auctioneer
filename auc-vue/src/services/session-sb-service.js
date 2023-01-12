@@ -13,10 +13,16 @@ export class SessionSbService {
         this.RESOURCES_URL = resourceUrl;
         this.BROWSER_STORAGE_ITEM_NAME = browserStorageItemName;
         this.getTokenFromBrowserStorage();
+
+        console.log("Created SessionSbService for " + resourceUrl);
     }
 
     async asyncSignIn(email, password) {
         const body = JSON.stringify({ email: email, password: password });
+
+        console.log(this.RESOURCES_URL + "/login");
+        console.log(body)
+        
         let response = await fetch(this.RESOURCES_URL + "/login",
             {
                 method : 'POST',
@@ -24,6 +30,8 @@ export class SessionSbService {
                 body : body,
                 credentials: 'include',
             })
+        
+        console.log(response);
         if (response.ok) {
             let user = await response.json();
             this.saveTokenIntoBrowserStorage(
@@ -32,13 +40,14 @@ export class SessionSbService {
             return user;
         } else {
             console.log(response)
-            return null;
+            return response;
         }
     }
 
     signOut() {
         // Remove the copy of the token from the service and browser storage
-        localStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME);
+        // localStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME);
+        this.saveTokenIntoBrowserStorage(null, null);
     }
 
     saveTokenIntoBrowserStorage(token, user) {
@@ -79,5 +88,9 @@ export class SessionSbService {
 
     getUserEmail() {
         return this.isLoggedIn() ? this._currentUser.name : "Visitor";
+    }
+
+    getCurrentToken() {
+        return this._currentToken;
     }
 }

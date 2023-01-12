@@ -60,12 +60,6 @@ export default {
     }
   },
 
-  // watch: {
-  //   '$route'() {
-  //     this.selectedOfferId = this.$route.params.id;
-  //   }
-  // },
-
   computed: {
     offerIsSelected() {
       return this.$route.params.id !== null;

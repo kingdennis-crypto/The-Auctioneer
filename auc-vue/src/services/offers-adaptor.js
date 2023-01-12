@@ -7,7 +7,12 @@ export class OffersAdaptor {
     }
 
     async fetchJson(url, options = null) {
+        console.log(url);
         let response = await fetch(url, options);
+
+        // TODO: No token provided. Fix that the header gets the token
+
+        console.log(response);
 
         if (response.ok) {
             return await response.json();
@@ -23,7 +28,9 @@ export class OffersAdaptor {
     }
 
     async asyncFindAllSummary() {
-        return await this.fetchJson(this.resourcesUrl + '/summary');
+        const res = await this.fetchJson(this.resourcesUrl + '/summary');
+        console.log(res);
+        return res;
     }
 
     async asyncFindById(id) {

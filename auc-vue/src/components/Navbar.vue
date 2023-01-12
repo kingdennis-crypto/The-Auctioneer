@@ -59,6 +59,7 @@
             <a href="#" class="text-gray-900 dark:text-white hover:underline">My account</a>
           </li>
         </ul>
+        <p>Hallo</p>
         <ul>
           <div class="mr-2">
             <p>Today is {{ getDate() }}</p>
