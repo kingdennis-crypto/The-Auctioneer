@@ -20,6 +20,7 @@ import Detail37cached from "@/components/offers/37/Detail37cached";
 // Miscellaneous
 import UnkownRoute from '@/components/UnknownRoute.vue';
 import SignIn from '@/components/SignIn.vue';
+import RequestErrorVue from '@/components/RequestError.vue';
 
 const routes = [
   { path: '/', component: WelcomeVue },
@@ -41,6 +42,7 @@ const routes = [
   },
   { path: '/sign-in', name: 'SignIn', component: SignIn },
   { path: '/sign-out', name: 'SignOut', redirect: '/sign-in?signOut=true' },
+  { path: '/error', component: RequestErrorVue, props: true, name: 'ERROR' },
   { path: '/:pathMatch(.*)', component: UnkownRoute },
 ];
 

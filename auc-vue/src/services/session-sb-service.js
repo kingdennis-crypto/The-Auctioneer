@@ -6,13 +6,13 @@ export class SessionSbService {
     BROWSER_STORAGE_ITEM_NAME;
     RESOURCES_URL;
 
-    _currentToken = null;
-    _currentUser = null;
+    _loggedIn = false;
 
     constructor(resourceUrl, browserStorageItemName) {
         this.RESOURCES_URL = resourceUrl;
         this.BROWSER_STORAGE_ITEM_NAME = browserStorageItemName;
-        this.getTokenFromBrowserStorage();
+        
+        this.signInFromBrowserStorage();
 
         console.log("Created SessionSbService for " + resourceUrl);
     }
@@ -20,9 +20,6 @@ export class SessionSbService {
     async asyncSignIn(email, password) {
         const body = JSON.stringify({ email: email, password: password });
 
-        console.log(this.RESOURCES_URL + "/login");
-        console.log(body)
-        
         let response = await fetch(this.RESOURCES_URL + "/login",
             {
                 method : 'POST',
@@ -33,64 +30,64 @@ export class SessionSbService {
         
         console.log(response);
         if (response.ok) {
-            let user = await response.json();
-            this.saveTokenIntoBrowserStorage(
-                response.headers.get('Authorization'),
-                user);
+            const token = response.headers.get("Authorization");
+            const user = await response.json();
+
+            this._loggedIn = true;
+            this.saveTokenIntoBrowserStorage(token, user);
+
             return user;
-        } else {
-            console.log(response)
-            return response;
+        } 
+
+        this.signOut();
+        return null;
+    }
+
+    signInFromBrowserStorage() {
+        const token = this.getCurrentToken();
+        const user = this.getCurrentUser();
+
+        if (!token || !user) {
+            this.signOut();
+            return;
         }
+
+        this._loggedIn = true
+        return true;
     }
 
     signOut() {
         // Remove the copy of the token from the service and browser storage
-        // localStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME);
-        this.saveTokenIntoBrowserStorage(null, null);
+        this._loggedIn = false;
+        this.removeTokenFromBrowserStorage();
     }
 
     saveTokenIntoBrowserStorage(token, user) {
-        this._currentToken = token;
-        this._currentUser = user;
-        // Bearer [TOKEN]
-        console.log("USER", user);
-
-        if (token == null) {
-            window.sessionStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME);
-            window.localStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME);
-        } else {
-            const array = token.split(" ");
-            token = array[1];
-
-
-
-            window.sessionStorage.setItem(this.BROWSER_STORAGE_ITEM_NAME, token);
-            window.localStorage.setItem(this.BROWSER_STORAGE_ITEM_NAME, token);
-        }
+        localStorage.setItem(this.BROWSER_STORAGE_ITEM_NAME, JSON.stringify({ jwt: token, user }));
     }
 
-    getTokenFromBrowserStorage() {
-        let token = window.sessionStorage.getItem(this.BROWSER_STORAGE_ITEM_NAME);
-
-        if (token === null) {
-            token = window.localStorage.getItem(this.BROWSER_STORAGE_ITEM_NAME);
-        }
-
-        this._currentToken = token;
-
-        return token;
+    removeTokenFromBrowserStorage() {
+        window.localStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME);
     }
 
     isLoggedIn() {
-        return this._currentUser !== null;
+        return this._loggedIn;
     }
-
-    getUserEmail() {
-        return this.isLoggedIn() ? this._currentUser.name : "Visitor";
-    }
-
+    
     getCurrentToken() {
-        return this._currentToken;
+        return JSON.parse(localStorage.getItem(this.BROWSER_STORAGE_ITEM_NAME))?.jwt;
+    }
+
+    getCurrentUser() {
+        const user = JSON.parse(localStorage.getItem(this.BROWSER_STORAGE_ITEM_NAME))?.user;
+        
+        console.log("USER", user);
+        // Sign out if the user is not valid
+        if (!user) {
+            this.signOut();
+            return;
+        }
+
+        return user;
     }
 }

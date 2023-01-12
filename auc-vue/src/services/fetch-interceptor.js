@@ -19,34 +19,51 @@ export class FetchInterceptor {
             FetchInterceptor.theInstance.session.getCurrentToken());
     }
 
-    request(url, options) {
-        console.log("FETCHING");
-        console.log(FetchInterceptor.theInstance.session.getCurrentToken());
-        let token = FetchInterceptor.theInstance.session.getCurrentToken();
-        console.log(token)
+    async request(url, options) {
+        const token = FetchInterceptor.theInstance.session.getCurrentToken();
+        console.log(token);
 
-        if (token === null) {
+        if (token == null) {
+            console.log("TOKEN NULL");
             return [url, options];
-        } else if (options === null) {
+        } else if (options == null) {
+            console.log("OPTIONS NULL");
+            // console.log([url, { headers: { Authorization: token } }]);
             return [url, { headers: { Authorization: token }}]
         } else {
+            console.log("ELSE");
             let newOptions = { ...options };
 
-            newOptions.headers = { Authorization: `Bearer ${token}` };
-
+            newOptions.headers = { ...options?.headers, Authorization: token };
+            
+            console.log(newOptions);
             return [url, newOptions];
         }
     }
 
     requestError(error) {
-        return error;
+        return Promise.reject(error);
     }
 
     response(response) {
+        const status = response.status;
+
+        if (status >= 400 && status < 600) {
+            // if (status === 401) { 
+            //     FetchInterceptor.theInstance.router.push('/sign-in');
+            //     return Promise.reject(response);
+            // }
+            
+            // FetchInterceptor.theInstance.router.push({
+            //     name: 'ERROR',
+            //     params: {}
+            // })
+        }
+
         return response;
     }
 
     responseError(error) {
-        return error;
+        return Promise.reject(error);
     }
 }

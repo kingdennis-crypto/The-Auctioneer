@@ -47,13 +47,13 @@ export default {
       password: "john",
     }
   },
-  watch: {
-    '$route.query': function (value) {
-      if (value.signOut === "true") {
-        this.sessionSbService.signOut();
+  created() {
+    const signOut = this.$route.query.signOut;
 
-        this.$router.push('/sign-in');
-      }
+    if (signOut) {
+      this.sessionSbService.signOut();
+
+      this.$router.push('/sign-in');
     }
   },
   methods: {
@@ -67,16 +67,11 @@ export default {
 
       const returnObj = await this.sessionSbService.asyncSignIn(this.email, this.password);
 
-      console.log(returnObj);
-      
       if (returnObj.status === 401) {
         return alert("You've entered the wrong credentials");
       }
 
-
-      // TODO:
-      //  If login credentials did not match, the backend should have provided an error response without a valid token or User object. The sign-in component should show a useful error message in that case and no token.
-
+      this.$router.push('/');
     }
   }
 }

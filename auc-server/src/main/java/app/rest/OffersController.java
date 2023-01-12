@@ -167,7 +167,7 @@ public class OffersController {
         boolean lowerValue = offer.getValueHighestBid() >= bid.getBidValue();
         boolean forSale = offer.getStatus() == Status.FOR_SALE;
 
-        if (lowerValue || forSale) {
+        if (lowerValue || !forSale) {
             throw new PreConditionFailed(String.format("Bid with value=%f does not beat latest bid on offerId=%d", bid.getBidValue(), offer.getId()));
         }
 

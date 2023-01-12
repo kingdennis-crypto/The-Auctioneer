@@ -21,7 +21,7 @@ export default {
   provide() {
 
     this.theSessionService = shallowReactive(
-      new SessionSbService("http://localhost:8083/authentication", "IDK"));
+      new SessionSbService("http://localhost:8083/authentication", "token"));
 
     this.theFetchInterceptor = 
       new FetchInterceptor(this.theSessionService, this.$router);
@@ -31,7 +31,7 @@ export default {
       usersService: new OffersAdaptor("http://localhost:8083/users"),
       
       cachedOffersService: reactive(new CachedOffersAdaptor("http://localhost:8083/offers", Offer.copyConstructor())),
-      sessionSbService: shallowReactive(new SessionSbService("http://localhost:8083/authentication", "token"))
+      sessionSbService: this.theSessionService
     }
   },
   unmounted() {

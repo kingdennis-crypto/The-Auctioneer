@@ -12,11 +12,11 @@
       </div>
       <div class="w-1/3 align-middle items-end`">
         <div v-if="isLoggedIn">
-          <router-link to="/sign-out" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Log out</router-link>
+          <router-link to="/sign-out" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Log out</router-link>
         </div>
         <div v-else>
           <router-link to="/sign-up" class="mr-6 text-sm font-medium text-gray-500 dark:text-white hover:underline">Sign up</router-link>
-          <router-link to="/sign-in" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login</router-link>
+          <router-link to="/sign-in" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login</router-link>
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@
             <a href="#" class="text-gray-900 dark:text-white hover:underline">My account</a>
           </li>
         </ul>
-        <p>Welcome {{ getEmail }} !</p>
+        <p>Welcome {{ name }} !</p>
         <ul>
           <div class="mr-2">
             <p>Today is {{ getDate() }}</p>
@@ -90,7 +90,8 @@ export default {
   inject: ["sessionSbService"],
   data() {
     return {
-      currentDate: dateFormat(now, "dddd mmmm dS, yyyy")
+      currentDate: dateFormat(now, "dddd mmmm dS, yyyy"),
+      name: "Visitor"
     }
   },
   methods: {
@@ -99,11 +100,15 @@ export default {
     }
   },
   computed: {
-    getEmail() {
-      return this.sessionSbService.getUserEmail();
-    },
     isLoggedIn() {
       return this.sessionSbService.isLoggedIn();
+    }
+  },
+  watch: {
+    '$route'() {
+      const loggedIn = this.sessionSbService.isLoggedIn();
+
+      this.name = loggedIn ? this.sessionSbService.getCurrentUser()?.name : "Visitor";
     }
   }
 }
