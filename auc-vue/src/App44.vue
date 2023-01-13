@@ -29,6 +29,7 @@ export default {
     return {
       offersService: new OffersAdaptor("http://localhost:8083/offers"),
       usersService: new OffersAdaptor("http://localhost:8083/users"),
+      bidsService: new OffersAdaptor("http://localhost:8083/bids"),
       
       cachedOffersService: reactive(new CachedOffersAdaptor("http://localhost:8083/offers", Offer.copyConstructor())),
       sessionSbService: this.theSessionService

@@ -10,12 +10,14 @@ import Overview31Vue from '@/components/offers/31/Overview31.vue';
 import Overview34Vue from '@/components/offers/34/Overview34.vue';
 import Overview37Vue from "@/components/offers/37/Overview37.vue";
 import Overview37cached from "@/components/offers/37/Overview37cached";
+import Overview45Vue from "@/components/offers/45/Overview45.vue";
 
 // Detail Pages
 import Detail32 from "@/components/offers/32/Detail32.vue";
 import Detail34 from "@/components/offers/34/Detail34.vue";
 import Detail37 from "@/components/offers/37/Detail37";
 import Detail37cached from "@/components/offers/37/Detail37cached";
+import Detail45 from "@/components/offers/45/Detail45.vue";
 
 // Miscellaneous
 import UnkownRoute from '@/components/UnknownRoute.vue';
@@ -38,8 +40,10 @@ const routes = [
     ]},
   { path: '/offers/overview37cached', component: Overview37cached, children: [
       { path: ':id', component: Detail37cached }
-  ]
-  },
+    ]},
+  { path: '/offers/overview45', component: Overview45Vue, children: [
+      { path: ':id', component: Detail45 }
+    ]},
   { path: '/sign-in', name: 'SignIn', component: SignIn },
   { path: '/sign-out', name: 'SignOut', redirect: '/sign-in?signOut=true' },
   { path: '/error', component: RequestErrorVue, props: true, name: 'ERROR' },

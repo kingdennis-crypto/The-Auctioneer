@@ -22,7 +22,7 @@ public class BidsRepositoryJpa extends AbstractEntityRepositoryJPA<Bid> {
     }
 
     /**
-     * Methhod to retrieve all offers
+     * Method to retrieve all offers
      *
      * @return a list of offers
      */

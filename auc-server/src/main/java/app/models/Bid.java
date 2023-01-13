@@ -21,10 +21,12 @@ public class Bid implements Identifiable {
     private double bidValue;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonManagedReference
-//    @JsonView(Views.ShallowSerializer.class)
     @JsonSerialize(using = Views.ShallowSerializer.class)
     private Offer offer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonSerialize(using = Views.ShallowSerializer.class)
+    private User user;
 
     protected Bid() {}
 
@@ -64,6 +66,14 @@ public class Bid implements Identifiable {
         this.offer = offer;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public static Bid createSampleBid() {
         double value = new Random().nextDouble(0, 50);
 
@@ -91,6 +101,16 @@ public class Bid implements Identifiable {
     public boolean dissociateOffer(Offer offer) {
         if (offer != null && getOffer() != null) {
             return offer.dissociateBid(this);
+        }
+
+        return false;
+    }
+
+    public boolean associateUser(User user) {
+        if (user != null && this.getUser() == null) {
+            setUser(user);
+            user.associateBid(this);
+            return true;
         }
 
         return false;

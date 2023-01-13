@@ -1,13 +1,16 @@
 package app.models;
 
+import app.repositories.interfaces.Identifiable;
 import app.views.Views;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "ACCOUNT")
-public class User {
+public class User implements Identifiable {
     @Id
     @SequenceGenerator(name = "User_Seq", initialValue = 50_000)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "User_Seq")
@@ -26,14 +29,24 @@ public class User {
     @JsonView(Views.Public.class)
     private String role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonSerialize(using = Views.ShallowSerializer.class)
+    private Set<Bid> bids;
+
     protected User() {}
 
-    public User (long id, String name, String email, String hashedPassword, String role) {
-        this.id = id;
+    public User (String name, String email, String hashedPassword, String role) {
         this.name = name;
         this.email = email;
         this.hashedPassword = hashedPassword;
         this.role = role;
+    }
+
+    public static User createSampleUser(String name, String role) {
+        String email = String.format("%s@hva.nl", name);
+        String hashedPassword = "password123";
+
+        return new User(name.toLowerCase(), email, hashedPassword, role);
     }
 
     public long getId() {
@@ -74,5 +87,24 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(Set<Bid> bids) {
+        this.bids = bids;
+    }
+
+    public boolean associateBid(Bid bid) {
+        if (bid != null && bid.getUser() == null) {
+            bid.associateUser(this);
+            bids.add(bid);
+
+            return true;
+        }
+
+        return false;
     }
 }

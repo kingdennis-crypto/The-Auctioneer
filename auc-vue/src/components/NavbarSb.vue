@@ -30,7 +30,7 @@
           </li>
           <li>
             <!-- <a href="#" class="text-gray-900 dark:text-white hover:underline">My offers</a> -->
-            <router-link to="/offers/overview32" class="text-gray-900 dark:text-white hover:underline">My bids</router-link>
+            <router-link to="/offers/overview45" class="text-gray-900">My bids</router-link>
           </li>
           <li>
             <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"
