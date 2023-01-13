@@ -24,8 +24,9 @@ public class Bid implements Identifiable {
     @JsonSerialize(using = Views.ShallowSerializer.class)
     private Offer offer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonSerialize(using = Views.ShallowSerializer.class)
+    @JsonView(Views.Public.class)
     private User user;
 
     protected Bid() {}

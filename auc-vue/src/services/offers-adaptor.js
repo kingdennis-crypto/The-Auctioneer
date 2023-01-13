@@ -23,8 +23,10 @@ export class OffersAdaptor {
         }
     }
 
-    async asyncFindAll() {
-        return await this.fetchJson(this.resourcesUrl);
+    async asyncFindAll(queryParams = null) {
+        const url = queryParams ? `${this.resourcesUrl}?${queryParams}` : this.resourcesUrl;
+
+        return await this.fetchJson(url);
     }
 
     async asyncFindAllSummary() {

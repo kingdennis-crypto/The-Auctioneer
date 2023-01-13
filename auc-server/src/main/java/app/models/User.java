@@ -8,6 +8,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import javax.persistence.*;
 import java.util.Set;
 
+@NamedQueries({
+        @NamedQuery(name = "User_find_by_email",
+            query = "SELECT u FROM User u WHERE u.email=?1")
+})
+
 @Entity
 @Table(name = "ACCOUNT")
 public class User implements Identifiable {

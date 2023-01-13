@@ -12,12 +12,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item) in offers" :key="item.id">
-              <td
-                @click="selectItem(item)"
-                class="py-4 px-6 font-medium whitespace-nowrap dark:text-white cursor-pointer rounded-sm [&:not(.bg-blue-500)]:hover:bg-gray-100"
-                :class="[ selectedOfferId === item.id ? selectedRowStyle : notSelectedRowStyle ]">
+            <tr 
+              v-for="(item) in offers" :key="item.id"
+              class="py-4 px-6 font-medium whitespace-nowrap dark:text-white cursor-pointer rounded-sm [&:not(.bg-blue-500)]:hover:bg-gray-100"
+              @click="selectItem(item)"
+              :class="[ selectedOfferId === item.id ? selectedRowStyle : notSelectedRowStyle ]"
+            >
+              <td>
                 {{ item.title }}
+              </td>
+              <td>
+                {{ item.valueHighestBid }}
+              </td>
+              <td>
+                {{ item.latestBid.user.name }}
               </td>
             </tr>
           </tbody>
@@ -29,7 +37,7 @@
       </div>
       <div class="w-2/3">
         <div class="relative h-full">
-          <router-view v-if="offerIsSelected" v-bind:item="selectedOffer" @getOffers="getAllOffers"/>
+          <router-view v-if="offerIsSelected" v-bind:item="selectedOffer" @getOffers="getAllOffers" @updated="reload" @canceled="selectedOffer = null"/>
           <div v-else class="h-full w-full absolute flex rounded-md">
             <p class="text-black text-2xl m-auto">No offer was selected</p>
           </div>
@@ -44,7 +52,7 @@ import { Offer } from "@/models/offer";
 
 export default {
   name: "OffersOverview45",
-  inject: ["offersService"],
+  inject: ["offersService", "restAdaptor"],
 
   created() {
     this.getAllOffers();
@@ -72,7 +80,7 @@ export default {
 
   methods: {
     async getAllOffers() {
-      this.offers = await this.offersService.asyncFindAllSummary();
+      this.offers = await this.restAdaptor.asyncFindAll({ status: "FOR_SALE" });
       this.nextId = this.offers[this.offers.length - 1].id;
     },
 
@@ -86,6 +94,16 @@ export default {
 
       this.offers.push(newOffer);
       this.selectItem(newOffer)
+    },
+
+    getHighestBid(offer) {
+      return offer.bids.reduce((prev, current) => (prev.value > current.value) ? prev : current);
+    },
+
+    async reload() {
+      console.log("RELOADING");
+      this.offers = await this.restAdaptor.asyncFindAll({ status: "FOR_SALE" });
+      this.selectedOffer = this.findSelectedRouteFromRouteParam(this.$route.params.id);
     },
 
     selectItem(element) {

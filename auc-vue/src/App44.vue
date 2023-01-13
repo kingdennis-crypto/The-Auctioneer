@@ -12,6 +12,7 @@ import { Offer } from "@/models/offer";
 import { SessionSbService } from "@/services/session-sb-service";
 import NavbarSb from './components/NavbarSb.vue';
 import { FetchInterceptor } from './services/fetch-interceptor';
+import { RestAdaptor } from './services/rest-adaptor-with-fetch';
 
 export default {
   name: 'App',
@@ -30,6 +31,7 @@ export default {
       offersService: new OffersAdaptor("http://localhost:8083/offers"),
       usersService: new OffersAdaptor("http://localhost:8083/users"),
       bidsService: new OffersAdaptor("http://localhost:8083/bids"),
+      restAdaptor: new RestAdaptor("http://localhost:8083", "/offers"),
       
       cachedOffersService: reactive(new CachedOffersAdaptor("http://localhost:8083/offers", Offer.copyConstructor())),
       sessionSbService: this.theSessionService

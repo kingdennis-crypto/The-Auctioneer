@@ -15,6 +15,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -39,9 +40,10 @@ public class AucServerApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		System.out.println("Running CommandLine Startup");
 
-		this.createInitialOffers();
-		this.createInitialUsers();
-		this.createInitialBids();
+		this.initializeData();
+//		this.createInitialOffers();
+//		this.createInitialUsers();
+//		this.createInitialBids();
 	}
 
 	public void createInitialOffers() {
@@ -56,6 +58,23 @@ public class AucServerApplication implements CommandLineRunner {
 		}
 	}
 
+	public void createInitialUsers() {
+		List<User> users = this.usersRepo.findAll();
+		List<Bid> bids = this.bidsRepo.findAll();
+
+		if (users.size() > 0) return;
+
+		System.out.println("Configuring some initial User data");
+
+		User dennis = User.createSampleUser("dennis", "Pesant");
+		User simon = User.createSampleUser("simon", "Pesant");
+		User yahia = User.createSampleUser("yahia", "Admin");
+
+		this.usersRepo.save(dennis);
+		this.usersRepo.save(simon);
+		this.usersRepo.save(yahia);
+	}
+
 	public void createInitialBids() {
 		Random random = new Random();
 		List<Bid> bids = this.bidsRepo.findAll();
@@ -65,11 +84,6 @@ public class AucServerApplication implements CommandLineRunner {
 		if (bids.size() > 0) return;
 
 		System.out.println("Configuring some initial Bids data");;
-
-//		Associate between zero and five bids on each offer,
-//		except for the offers with status NEW.
-//		The values of the bids should be increasing.
-//		Associate each of the Bids at random with one of the Users.
 
 		System.out.println(offers.size());
 
@@ -94,28 +108,45 @@ public class AucServerApplication implements CommandLineRunner {
 
 				bidsRepo.save(bid);
 			}
-		}
 
-		for (int i = 0; i < 9; i++) {
-			Bid bid = Bid.createSampleBid();
-			offers.get(i).associateBid(bid);
+			offer.setValueHighestBid((int) highestBid);
 		}
 	}
 
-	public void createInitialUsers() {
-		List<User> users = this.usersRepo.findAll();
-		List<Bid> bids = this.bidsRepo.findAll();
+	public void initializeData() {
+		Random random = new Random();
+		List<Offer> offers = new ArrayList<>();
 
-		if (users.size() > 0) return;
+		System.out.println("Configuring some initial data");
 
-		System.out.println("Configuring some initial User data");
+		User dennis = usersRepo.save(User.createSampleUser("dennis", "Pesant"));
+		User simon = usersRepo.save(User.createSampleUser("simon", "Pesant"));
+		User yahia = usersRepo.save(User.createSampleUser("yahia", "Admin"));
 
-		User dennis = User.createSampleUser("dennis", "Pesant");
-		User simon = User.createSampleUser("simon", "Pesant");
-		User yahia = User.createSampleUser("yahia", "Admin");
+		List<User> users = new ArrayList<>(List.of(dennis, simon, yahia));
 
-		this.usersRepo.save(dennis);
-		this.usersRepo.save(simon);
-		this.usersRepo.save(yahia);
+		for (int i = 0; i < 9; i++) {
+			Offer offer = offersRepo.save(Offer.createSampleOffer());
+
+			if (offer.getStatus() == Status.NEW) {
+				continue;
+			}
+
+			int randomNum = random.nextInt(5) + 1;
+
+			double highestBid = 0;
+
+			for (int j = 0; j < randomNum; j++) {
+				highestBid += random.nextDouble(10);
+
+				Bid bid = new Bid(highestBid);
+				User user = users.get(random.nextInt(users.size()));
+
+				bid.associateUser(user);
+				bid.associateOffer(offer);
+
+				bidsRepo.save(bid);
+			}
+		}
 	}
 }

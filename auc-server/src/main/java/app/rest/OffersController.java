@@ -5,6 +5,7 @@ import app.exceptions.NotFoundException;
 import app.exceptions.PreConditionFailed;
 import app.models.Bid;
 import app.models.Offer;
+import app.models.User;
 import app.models.enums.Status;
 import app.repositories.interfaces.EntityRepository;
 import app.views.Views;
@@ -34,6 +35,9 @@ public class OffersController {
 
     @Autowired
     private EntityRepository<Bid> bidsRepository;
+
+    @Autowired
+    private EntityRepository<User> userRepository;
 
 //    @GetMapping("")
 //    public List<Offer> getAll() {
@@ -159,6 +163,7 @@ public class OffersController {
     @PostMapping(path = "{id}/bids", produces = "application/json")
     public ResponseEntity<Bid> addBidToOffer(@PathVariable long id, @RequestBody Bid bid) {
         Offer offer = offersRepo.findById(id);
+        User user = userRepository.findById(bid.getUser().getId());
 
         if (offer == null) {
             throw new NotFoundException("Offer not found");
@@ -167,13 +172,21 @@ public class OffersController {
         boolean lowerValue = offer.getValueHighestBid() >= bid.getBidValue();
         boolean forSale = offer.getStatus() == Status.FOR_SALE;
 
-        if (lowerValue || !forSale) {
+        if (!forSale) {
+            throw new PreConditionFailed("This Offer does not have the status for sale");
+        }
+
+        if (lowerValue) {
+            System.out.println(bid.getBidValue());
+            System.out.println(offer.getValueHighestBid());
             throw new PreConditionFailed(String.format("Bid with value=%f does not beat latest bid on offerId=%d", bid.getBidValue(), offer.getId()));
         }
 
+        bid.associateOffer(offer);
+        bid.associateUser(user);
+
         bid = bidsRepository.save(bid);
 
-        offer.associateBid(bid);
         offersRepo.save(offer);
 
         URI location = ServletUriComponentsBuilder

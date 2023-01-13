@@ -20,60 +20,40 @@
     </div>
     <form class="text-left">
       <div class="mb-6">
-        <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Title</label>
-        <input type="text" id="title" placeholder="The title of a auction piece" v-model="offerCopy.title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+        <label for="title" class="block text-sm font-medium text-gray-900 dark:text-gray-300">Title</label>
+        <input type="text" id="title" placeholder="The title of a auction piece" v-model="offerCopy.title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>
       </div>
       <div class="mb-6">
-        <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Description</label>
-        <input type="text" id="description" placeholder="Description of auction piece" v-model="offerCopy.description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+        <label for="description" class="block text-sm font-medium text-gray-900 dark:text-gray-300">Description</label>
+        <input type="text" id="description" placeholder="Description of auction piece" v-model="offerCopy.description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>
       </div>
       <div class="mb-6">
-        <label for="highestBid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Highest bid</label>
-        <input type="text" id="highestBid" placeholder="The highest bid of the auction bid" v-model="offerCopy.valueHighestBid" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+        <label for="highestBid" class="block text-sm font-medium text-gray-900 dark:text-gray-300">Highest bid</label>
+        <input type="text" id="highestBid" placeholder="The highest bid of the auction bid" v-model="offerCopy.valueHighestBid" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>
       </div>
       <div class="mb-6">
-        <label for="highestBid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sell date</label>
-        <input type="date" id="sellDate" placeholder="The highest bid of the auction bid" v-model="sellDateUpdater" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+        <label for="highestBid" class="block text-sm font-medium text-gray-900 dark:text-gray-300">Sell date</label>
+        <input type="date" id="sellDate" placeholder="The highest bid of the auction bid" v-model="sellDateUpdater" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>
       </div>
       <div class="mb-6">
-        <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Status</label>
-        <select id="status" v-model="offerCopy.status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <label for="status" class="block text-sm font-medium text-gray-900 dark:text-gray-400">Status</label>
+        <select id="status" v-model="offerCopy.status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>
           <option v-for="(status, index) in getStatuses()" :key="index">{{ status }}</option>
         </select>
       </div>
+      <div class="mb-6">
+        <label for="latestBid" class="block text-sm font-medium text-gray-900 dark:text-gray-300">Latest Bid</label>
+        <input type="text" id="title" placeholder="The title of a auction piece" :value="JSON.stringify(offerCopy.latestBid)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>
+      </div>
+      <div class="mb-6">
+        <label for="highestBid" class="block text-sm font-medium text-gray-900 dark:text-gray-300">New Bid</label>
+        <input type="text" id="highestBid" placeholder="The highest bid of the auction bid" v-model="newBidValue" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <button @click="submitBid" :disabled="!newBidIsHigher" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 disabled:bg-blue-200 disabled:cursor-not-allowed">Submit</button>
+        <button @click="cancelChanges" type="button" class="py-2.5 px-5 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200">Cancel</button>
+      </div>
     </form>
-    <div class="w-full flex justify-end gap-4">
-      <button
-          class="bg-red-500 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-red-600"
-          @click="deleteOffer()"
-      >
-        Delete
-      </button>
-      <button
-          class="bg-red-500 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-red-600"
-          @click="clearChanges()"
-      >
-        Clear
-      </button>
-      <button
-          class="bg-yellow-400 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-yellow-600 disabled:cursor-not-allowed disabled:bg-yellow-200"
-          @click="revertChanges()" :disabled="hasChanged"
-      >
-        Revert
-      </button>
-      <button
-          class="bg-red-500 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-red-600"
-          @click="cancelChanges()"
-      >
-        Cancel
-      </button>
-      <button
-          class="bg-green-500 p-3 rounded-md text-white cursor-pointer font-medium hover:bg-green-600 disabled:cursor-not-allowed disabled:bg-green-200"
-          @click="saveChanges()" :disabled="hasChanged"
-      >
-        Save
-      </button>
-    </div>
   </div>
 </template>
 
@@ -85,12 +65,13 @@ export default {
   name: 'OffersDetail45',
   props: ['item'],
   emits: ['getOffers'],
-  inject: ['offersService'],
+  inject: ['offersService', 'restAdaptor', 'sessionSbService'],
   data() {
     return {
       offer: null,
       offerCopy: null,
       notFound: false,
+      newBidValue: 0
     }
   },
   created() {
@@ -106,6 +87,7 @@ export default {
       const id = this.$route.params.id;
 
       const request = await this.offersService.asyncFindById(id);
+      console.log("OFFER: ", request)
 
       if (request === null) {
         this.notFound = true;
@@ -118,8 +100,35 @@ export default {
       this.notFound = false;
       this.offer = request;
       this.offerCopy = Offer.copyConstructor(request);
+      this.newBidValue = request.latestBid.bidValue + 1;
+    },
 
-      console.log(this.offer);
+    submitBid() {
+      console.log("Submitting bid");
+      const user = this.sessionSbService.getCurrentUser();
+
+      delete user.bids;
+      delete user.id;
+
+      console.log("BID", {
+        bidValue: parseInt(this.newBidValue),
+        offerId: this.offerCopy.id,
+        user: user
+      })
+
+      this.restAdaptor.asyncSave({
+        bidValue: this.newBidValue,
+        offerId: this.offerCopy.id,
+        user: user
+      }, `/${this.offerCopy.id}/bids`);
+
+      alert("Bid created");
+      this.getOffer();
+      this.$emit("updated");
+    },
+
+    latestBid() {
+      return this.offer.bids.reduce((prev, current) => (prev.value > current.value) ? prev : current);
     },
 
     getStatuses() {
@@ -164,11 +173,13 @@ export default {
     cancelChanges() {
       if (this.hasChanged) {
         this.$router.push(this.$route.matched[0].path);
+        this.$emit('canceled');
         return;
       }
 
       if (confirm("Are you sure you want to cancel?")) {
         this.$router.push(this.$route.matched[0].path);
+        this.$emit('canceled');
       }
     },
 
@@ -206,6 +217,9 @@ export default {
     hasChanged() {
       return Offer.equals(this.offer, this.offerCopy);
     },
+    newBidIsHigher() {
+      return this.newBidValue > this.latestBid().bidValue;
+    }
   },
 
   // Unsaved changes on route change

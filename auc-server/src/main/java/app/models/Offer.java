@@ -158,12 +158,9 @@ public class Offer implements Identifiable {
         // FIXME rewrite the if statement as the bid
 
         if (bid != null && bid.getOffer() == null) {
-//            if (bid.getOffer() == null) {
-//                bid.associateOffer(this);
-//            }
-
             bid.associateOffer(this);
             setValueHighestBid((int) bid.getBidValue());
+
             bids.add(bid);
 
             return true;
@@ -183,6 +180,17 @@ public class Offer implements Identifiable {
         }
 
         return false;
+    }
+
+    @Transient
+    @JsonView(Views.Summary.class)
+    @JsonSerialize(using = Views.ShallowSerializer.class)
+    public Bid getLatestBid() {
+        if (this.bids == null || this.bids.size() == 0) {
+            return null;
+        }
+
+        return this.bids.get(this.bids.size() - 1);
     }
 }
 

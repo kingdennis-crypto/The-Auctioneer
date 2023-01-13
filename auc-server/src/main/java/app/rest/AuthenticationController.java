@@ -3,6 +3,7 @@ package app.rest;
 import app.APIConfig;
 import app.exceptions.NotAcceptableException;
 import app.models.User;
+import app.repositories.interfaces.EntityRepository;
 import app.utilities.JWToken;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -21,6 +23,9 @@ import java.util.Objects;
 public class AuthenticationController {
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private EntityRepository<User> userRepo;
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody ObjectNode object) {
@@ -34,7 +39,15 @@ public class AuthenticationController {
             throw new NotAcceptableException("Wrong credentials");
         }
 
-        User user = new User(emailArray[0], email, password, role);
+        List<User> users = userRepo.findByQuery("User_find_by_email", email);
+        User user;
+
+        if (users.size() == 0) {
+            user = new User(emailArray[0], email, password, role);
+        } else {
+            user = users.get(0);
+        }
+
         JWToken jwToken = new JWToken(user.getName(), user.getId(), user.getRole());
 
         String issuer = environment.getProperty("jwt.issuer");
